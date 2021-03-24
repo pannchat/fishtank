@@ -13,7 +13,7 @@
     <body>
   
         <div class="header">
-            dosing calculator
+            dosage calculator
         </div>
         <div class="flex-box">
             <div id="tank-preview">
@@ -32,9 +32,10 @@
                     <input class="tanksize-input" id="tank-depth" type="input" placeholder="depth"/><span>cm</span>
                     <input class="tanksize-input" id="tank-height" type="input" placeholder="height"/><span>cm</span>
                 </div>
-                <button onclick="calc()">계산</button>
+                <input type="button" value="계산" onclick="calc()" style="width:100%;height:30px;border: none; background-color:rgb(125, 125, 125);color:whitesmoke"/>
+
                 <div id="calc-capacity">
-                    수조의 물 양은 약 10L
+                    수조의 물 양은 약 <b id="capacity">100L</b>
                 </div>
                 <div class="flex-box" id="search-container">
                     대충 검색창 위치
@@ -61,10 +62,10 @@
         </div>
         <script>
             function calc(){
-                var tankWidth = document.getElementById("tank-width").value  / 6;
-                var tankHeigth = document.getElementById("tank-height").value / 6 ; 
-                var tankDepth = document.getElementById("tank-depth").value / 6;
-                // alert(tankWidth*tankHeigth*tankDepth);
+                var tankWidth = document.getElementById("tank-width").value ;
+                var tankHeight = document.getElementById("tank-height").value; 
+                var tankDepth = document.getElementById("tank-depth").value;
+                // alert(tankWidth*tankHeight*tankDepth);
                 
                 var front = document.getElementById("front");
                 var back = document.getElementById("back");
@@ -72,32 +73,33 @@
                 var right = document.getElementById("right");
                 var top = document.getElementById("top");
                 var bottom = document.getElementById("bottom");
-                front.style.width = tankWidth + 'rem';
-                front.style.height = tankHeigth + 'rem';
+                front.style.width = tankWidth + 'px';
+                front.style.height = tankHeight + 'px';
                 front.style.transform = '';
-                front.style.transform = 'translateZ(' + (tankDepth/2) +'rem)';
-                back.style.width = tankWidth + 'rem';
-                back.style.transform = 'rotate(-180deg) translateZ(' + -(tankDepth/2) +'rem)';
-                back.style.height = tankHeigth + 'rem';
-                left.style.width = tankDepth + 'rem';
-                left.style.transform = 'translateX(' + -((tankDepth/2)) +'rem) rotateY(90deg)';
-                // left.setAttribute("transform",`translateX(-${tankDepth}rem) rotateY(190deg)`);
-                left.style.height = tankHeigth + 'rem';
-                right.style.width = tankDepth + 'rem';
-                right.style.height = tankHeigth + 'rem';
-                right.style.transform = 'translateX(' +  (tankWidth - tankDepth + tankDepth/2) +'rem) rotateY(90deg)';
-                top.style.width = tankWidth + 'rem';
-                top.style.height = tankHeigth + 'rem';
-                top.style.transform = 'translateY(' + -(tankHeigth/2) + 'rem) rotateX(90deg)';
-                bottom.style.width = tankWidth + 'rem';
-                bottom.style.height = tankDepth + 'rem';
-                bottom.style.transform = 'translateY(' + (tankHeigth/2) + 'rem) rotateX(90deg)';
+                front.style.transform = 'translateZ(' + (tankDepth/2) +'px)';
+                back.style.width = tankWidth + 'px';
+                back.style.transform = 'rotate(-180deg) translateZ(' + -(tankDepth/2) +'px)';
+                back.style.height = tankHeight + 'px';
+                left.style.width = tankDepth + 'px';
+                left.style.transform = 'translateX(' + -((tankDepth/2)) +'px) rotateY(90deg)';
+                // left.setAttribute("transform",`translateX(-${tankDepth}px) rotateY(190deg)`);
+                left.style.height = tankHeight + 'px';
+                right.style.width = tankDepth + 'px';
+                right.style.height = tankHeight + 'px';
+                right.style.transform = 'translateX(' +  (tankWidth - tankDepth + tankDepth/2) +'px) rotateY(90deg)';
+                top.style.width = tankWidth + 'px';
+                top.style.height = tankDepth + 'px';
+                top.style.transform = 'translateY(' + -(tankDepth/2) + 'px) rotateX(90deg)';
+                bottom.style.width = tankWidth + 'px';
+                bottom.style.height = tankDepth + 'px';
+                bottom.style.transform = 'translateY(' + (tankHeight - tankDepth + tankDepth/2) + 'px) rotateX(90deg)';
 
                 var containerWidth = document.querySelector('.tank-container').clientWidth;
                 var face = document.querySelectorAll('.face');
                 
                 face.forEach(el => el.style.left = (containerWidth - Math.max(front.clientWidth,right.clientWidth))/2);
-
+                document.getElementById('capacity').innerText = `${tankWidth * tankDepth * tankHeight/1000}L`
+                
                 
             }
             
