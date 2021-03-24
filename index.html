@@ -74,21 +74,24 @@
                 var bottom = document.getElementById("bottom");
                 front.style.width = tankWidth + 'px';
                 front.style.height = tankHeigth + 'px';
-                front.style.transform = 'translateZ(30px)';
+                front.style.transform = '';
+                front.style.transform = 'translateZ(' + (tankDepth/2) +'px)';
                 back.style.width = tankWidth + 'px';
-                back.style.transform = 'translateZ(-30px)';
+                back.style.transform = 'rotate(-180deg) translateZ(' + -(tankDepth/2) +'px)';
                 back.style.height = tankHeigth + 'px';
                 left.style.width = tankDepth + 'px';
+                left.style.transform = 'translateX(' + -((tankDepth/2)+2.5) +'px) rotateY(90deg)';
+                // left.setAttribute("transform",`translateX(-${tankDepth}px) rotateY(190deg)`);
                 left.style.height = tankHeigth + 'px';
                 right.style.width = tankDepth + 'px';
                 right.style.height = tankHeigth + 'px';
+                right.style.transform = 'translateX(' +  ((tankDepth*1.5) + 2.5) +'px) rotateY(90deg)';
                 top.style.width = tankWidth + 'px';
                 top.style.height = tankHeigth + 'px';
                 bottom.style.width = tankWidth + 'px';
                 bottom.style.height = tankDepth + 'px';
                 var containerWidth = document.querySelector('.tank-container').clientWidth;
                 var face = document.querySelectorAll('.face');
-                console.log(face);
                 
                 face.forEach(el => el.style.left = (containerWidth - Math.max(front.clientWidth,right.clientWidth))/2);
 

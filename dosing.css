@@ -88,7 +88,7 @@ div{
 
     box-sizing: content-box;
     display:flex;
-    justify-content: center;;
+    justify-content: center;
     transform-style:preserve-3d;
 
 
@@ -109,12 +109,12 @@ div{
     transform:translateZ(-30px);
 }
 #left{
+    
 
-    transform: translateX(-30px) rotateY(-90deg) ;
 }
 #right{
 
-    transform: translateX(90px) rotateY(90deg) ;
+    transform: translateX(-60px) rotateY(90deg) ;
 }
 #top{
 
@@ -129,6 +129,6 @@ div{
 	position: absolute;
     top:-10px;
     left:100px;
-    border: 3px solid;
+    border: 5px solid;
     background-color: rgba(242,122,33,0.3);
 }
