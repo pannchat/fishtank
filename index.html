@@ -31,11 +31,20 @@
                     <input class="tanksize-input" id="tank-width" type="input" placeholder="width"/><span>cm</span>
                     <input class="tanksize-input" id="tank-depth" type="input" placeholder="depth"/><span>cm</span>
                     <input class="tanksize-input" id="tank-height" type="input" placeholder="height"/><span>cm</span>
+                
+                <div id="detailed" display="none">
+                    <input class="tanksize-input" id="tank-depth" type="input" placeholder="유리두께"/><span>T</span>
+                    <input class="tanksize-input" id="tank-sand" type="input" placeholder="바닥재"/><span>cm</span>
+
+                </div>
+            </div>
+                <div>
+                    <label class="switch-button"> <input type="checkbox" id="checkbox"/> <span class="onoff-switch"></span> </label>
                 </div>
                 <input type="button" value="계산" onclick="calc()" style="width:100%;height:30px;border: none; background-color:rgb(125, 125, 125);color:whitesmoke"/>
 
                 <div id="calc-capacity">
-                    수조의 물 양은 약 <b id="capacity">100L</b>
+                    수조의 물 용량은 약 <b id="capacity">100L</b>
                 </div>
                 <div class="flex-box" id="search-container">
                     대충 검색창 위치
@@ -62,9 +71,19 @@
         </div>
         <script>
             function calc(){
+                var s = 3;
                 var tankWidth = document.getElementById("tank-width").value ;
-                var tankHeight = document.getElementById("tank-height").value; 
+                var tankHeight = document.getElementById("tank-height").value ; 
                 var tankDepth = document.getElementById("tank-depth").value;
+                var tankSand = document.getElementById("tank-sand").value;
+                var tankWidth2 = tankWidth;
+                var tankHeight2 = tankHeight;
+                var tankDepth2 = tankDepth;
+                var tankSand2 = tankSand;
+                tankWidth *= s;
+                tankHeight *= s;
+                tankDepth *= s;
+                tankSand *= s;
                 // alert(tankWidth*tankHeight*tankDepth);
                 
                 var front = document.getElementById("front");
@@ -73,6 +92,18 @@
                 var right = document.getElementById("right");
                 var top = document.getElementById("top");
                 var bottom = document.getElementById("bottom");
+                var checkbox = document.getElementById("checkbox");
+                if (tankSand != ""){
+                    // var tankArr = document.querySelectorAll('.tank > div');
+                    // console.log(tankArr);
+                    var sand =`<div style='width:100%; height:${tankSand}px;position:absolute;bottom:0;background-color:rgba(150, 96, 29, 0.714);margin:0px'></div>`;
+                    front.innerHTML = sand;
+                    left.innerHTML = sand;
+                    right.innerHTML=sand;
+                    back.innerHTML = `<div style='width:100%; height:${tankSand}px;position:absolute;top:0;background-color:rgba(150, 96, 29, 0.714);margin:0px'></div>`;
+                    // bottom.innerHTML = `<div style='width:100%; height:100% background-color:rgba(150, 96, 29, 0.714);position:absolute; bottom:${tankSand}'></div>`;
+                    
+                }
                 front.style.width = tankWidth + 'px';
                 front.style.height = tankHeight + 'px';
                 front.style.transform = '';
@@ -98,11 +129,26 @@
                 var face = document.querySelectorAll('.face');
                 
                 face.forEach(el => el.style.left = (containerWidth - Math.max(front.clientWidth,right.clientWidth))/2);
-                document.getElementById('capacity').innerText = `${tankWidth * tankDepth * tankHeight/1000}L`
+                let mytank = tankWidth2 * tankDepth2 * tankHeight2/1000;
+                if (checkbox.checked)
+                    mytank = tankWidth2 * tankDepth2 * (tankHeight2-tankSand2)/1000;
+                    
+
+                
+                document.getElementById('capacity').innerText = `${mytank}L`
                 
                 
             }
-            
+           
+            checkbox.addEventListener('change', function() {
+                var detail = document.getElementById('detailed');
+                if(this.checked){
+                    
+                    detail.style.display="block";
+                }else{
+                    detail.style.display="none";
+                }
+            })
         </script>
     </body>
 </html>
