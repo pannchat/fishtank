@@ -19,7 +19,7 @@
             <div id="tank-preview">
                 <div class="tank-container">
                     <div class="tank">
-                        <div class="face" id="front"></div>
+                        <div class="face" id="front">ㅎㅇ</div>
                         <div class="face" id="back"></div>
                         <div class="face" id="left"></div>
                         <div class="face" id="right"></div>
@@ -61,9 +61,9 @@
         </div>
         <script>
             function calc(){
-                var tankWidth = document.getElementById("tank-width").value
-                var tankHeigth = document.getElementById("tank-height").value
-                var tankDepth = document.getElementById("tank-depth").value
+                var tankWidth = document.getElementById("tank-width").value  / 6;
+                var tankHeigth = document.getElementById("tank-height").value / 6 ; 
+                var tankDepth = document.getElementById("tank-depth").value / 6;
                 // alert(tankWidth*tankHeigth*tankDepth);
                 
                 var front = document.getElementById("front");
@@ -72,24 +72,27 @@
                 var right = document.getElementById("right");
                 var top = document.getElementById("top");
                 var bottom = document.getElementById("bottom");
-                front.style.width = tankWidth + 'px';
-                front.style.height = tankHeigth + 'px';
+                front.style.width = tankWidth + 'rem';
+                front.style.height = tankHeigth + 'rem';
                 front.style.transform = '';
-                front.style.transform = 'translateZ(' + (tankDepth/2) +'px)';
-                back.style.width = tankWidth + 'px';
-                back.style.transform = 'rotate(-180deg) translateZ(' + -(tankDepth/2) +'px)';
-                back.style.height = tankHeigth + 'px';
-                left.style.width = tankDepth + 'px';
-                left.style.transform = 'translateX(' + -((tankDepth/2)+2.5) +'px) rotateY(90deg)';
-                // left.setAttribute("transform",`translateX(-${tankDepth}px) rotateY(190deg)`);
-                left.style.height = tankHeigth + 'px';
-                right.style.width = tankDepth + 'px';
-                right.style.height = tankHeigth + 'px';
-                right.style.transform = 'translateX(' +  ((tankDepth*1.5) + 2.5) +'px) rotateY(90deg)';
-                top.style.width = tankWidth + 'px';
-                top.style.height = tankHeigth + 'px';
-                bottom.style.width = tankWidth + 'px';
-                bottom.style.height = tankDepth + 'px';
+                front.style.transform = 'translateZ(' + (tankDepth/2) +'rem)';
+                back.style.width = tankWidth + 'rem';
+                back.style.transform = 'rotate(-180deg) translateZ(' + -(tankDepth/2) +'rem)';
+                back.style.height = tankHeigth + 'rem';
+                left.style.width = tankDepth + 'rem';
+                left.style.transform = 'translateX(' + -((tankDepth/2)) +'rem) rotateY(90deg)';
+                // left.setAttribute("transform",`translateX(-${tankDepth}rem) rotateY(190deg)`);
+                left.style.height = tankHeigth + 'rem';
+                right.style.width = tankDepth + 'rem';
+                right.style.height = tankHeigth + 'rem';
+                right.style.transform = 'translateX(' +  (tankWidth - tankDepth + tankDepth/2) +'rem) rotateY(90deg)';
+                top.style.width = tankWidth + 'rem';
+                top.style.height = tankHeigth + 'rem';
+                top.style.transform = 'translateY(' + -(tankHeigth/2) + 'rem) rotateX(90deg)';
+                bottom.style.width = tankWidth + 'rem';
+                bottom.style.height = tankDepth + 'rem';
+                bottom.style.transform = 'translateY(' + (tankHeigth/2) + 'rem) rotateX(90deg)';
+
                 var containerWidth = document.querySelector('.tank-container').clientWidth;
                 var face = document.querySelectorAll('.face');
                 
