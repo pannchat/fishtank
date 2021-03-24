@@ -1,0 +1,100 @@
+<html>
+    <head>
+        <title>
+            dosing
+        </title>
+        <link rel="stylesheet" href="./dosing.css" />
+        <meta charset="utf-8">
+        <meta name="viewport" 
+          content="width=device-width, height=device-height, 
+                     minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0">
+
+    </head>
+    <body>
+  
+        <div class="header">
+            dosing calculator
+        </div>
+        <div class="flex-box">
+            <div id="tank-preview">
+                <div class="tank-container">
+                    <div class="tank">
+                        <div class="face" id="front"></div>
+                        <div class="face" id="back"></div>
+                        <div class="face" id="left"></div>
+                        <div class="face" id="right"></div>
+                        <div class="face" id="top"></div>
+                        <div class="face" id="bottom"></div>
+                    </div>
+                </div>
+                <div id="tanksize">
+                    <input class="tanksize-input" id="tank-width" type="input" placeholder="width"/><span>cm</span>
+                    <input class="tanksize-input" id="tank-depth" type="input" placeholder="depth"/><span>cm</span>
+                    <input class="tanksize-input" id="tank-height" type="input" placeholder="height"/><span>cm</span>
+                </div>
+                <button onclick="calc()">계산</button>
+                <div id="calc-capacity">
+                    수조의 물 양은 약 100L
+                </div>
+                <div class="flex-box" id="search-container">
+                    대충 검색창 위치
+                    <div class="search-list">
+                        <img src="./neoc.png" style="height:100px;">
+                        <div>
+                        <p style="font-weight:bold;font-size:1.1rem">네오 C</p>
+                        권장 사용량 : 40L 당 10cc<br>
+                        내 어항 사용량 : 25cc 권장<br>
+                        <a href="http://aquarioshop.co.kr/data/editor/goods/d5658512ff7f0340.jpg">상세 설명서 보기</a>
+                        </div>
+                    </div>
+                    <div class="search-list">
+                        <img src="./flourishExel.png" style="height:100px;">
+                        <div>
+                        <p style="font-weight:bold;font-size:1.1rem">네오 C</p>
+                        권장 사용량 : 40L 당 10cc<br>
+                        내 어항 사용량 : 25cc 권장<br>
+                        <a href="http://aquarioshop.co.kr/data/editor/goods/d5658512ff7f0340.jpg">상세 설명서 보기</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function calc(){
+                var tankWidth = document.getElementById("tank-width").value
+                var tankHeigth = document.getElementById("tank-height").value
+                var tankDepth = document.getElementById("tank-depth").value
+                // alert(tankWidth*tankHeigth*tankDepth);
+                
+                var front = document.getElementById("front");
+                var back = document.getElementById("back");
+                var left = document.getElementById("left");
+                var right = document.getElementById("right");
+                var top = document.getElementById("top");
+                var bottom = document.getElementById("bottom");
+                front.style.width = tankWidth + 'px';
+                front.style.height = tankHeigth + 'px';
+                front.style.transform = 'translateZ(30px)';
+                back.style.width = tankWidth + 'px';
+                back.style.transform = 'translateZ(-30px)';
+                back.style.height = tankHeigth + 'px';
+                left.style.width = tankDepth + 'px';
+                left.style.height = tankHeigth + 'px';
+                right.style.width = tankDepth + 'px';
+                right.style.height = tankHeigth + 'px';
+                top.style.width = tankWidth + 'px';
+                top.style.height = tankHeigth + 'px';
+                bottom.style.width = tankWidth + 'px';
+                bottom.style.height = tankDepth + 'px';
+                var containerWidth = document.querySelector('.tank-container').clientWidth;
+                var face = document.querySelectorAll('.face');
+                console.log(face);
+                
+                face.forEach(el => el.style.left = (containerWidth - Math.max(front.clientWidth,right.clientWidth))/2);
+
+                
+            }
+            
+        </script>
+    </body>
+</html>
