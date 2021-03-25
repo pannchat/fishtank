@@ -165,11 +165,18 @@
                 bottom.style.transform = 'translateY(' + (tankHeight - tankDepth + tankDepth/2) + 'px) rotateX(90deg)';
 
                 var containerWidth = document.querySelector('.tank-container').clientWidth;
+                var containerHeight = document.querySelector('.tank-container').clientHeight;
                 var face = document.querySelectorAll('.face');
 
                 // alert();
 
-                face.forEach(el => el.style.left = (containerWidth - Math.max(front.clientWidth,right.clientWidth))/2);
+                face.forEach(
+                    (el) =>{
+                        el.style.left = (containerWidth - Math.max(front.clientWidth,right.clientWidth))/2;
+                        el.style.top = (containerHeight -front.clientHeight)/2;
+                    }
+                    
+                    );
                 let mytank = tankWidth2 * tankDepth2 * tankHeight2/1000;
                 var capacity = document.getElementById('calc-capacity') ;
                 if (checkbox.checked){
