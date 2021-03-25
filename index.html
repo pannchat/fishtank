@@ -19,7 +19,7 @@
             <div id="tank-preview">
                 <div class="tank-container">
                     <div class="tank">
-                        <div class="face" id="front">ㅎㅇ</div>
+                        <div class="face" id="front"><b style="color:whitesmoke;">씨알이</b></div>
                         <div class="face" id="back"></div>
                         <div class="face" id="left"></div>
                         <div class="face" id="right"></div>
@@ -33,9 +33,9 @@
                     <input class="tanksize-input" id="tank-height" type="input" placeholder="height"/><span>cm</span>
                 
                 <div id="detailed" display="none">
-                    <input class="tanksize-input" id="tank-depth" type="input" placeholder="유리두께"/><span>T</span>
+                    <input class="tanksize-input" id="tank-wieght" type="input" placeholder="유리두께"/><span>T &nbsp;&nbsp;</span>
                     <input class="tanksize-input" id="tank-sand" type="input" placeholder="바닥재"/><span>cm</span>
-
+                    <input class="tanksize-input" id="water-level" type="input" placeholder="수위"/><span>cm</span>
                 </div>
             </div>
                 <div>
@@ -44,7 +44,7 @@
                 <input type="button" value="계산" onclick="calc()" style="width:100%;height:30px;border: none; background-color:rgb(125, 125, 125);color:whitesmoke"/>
 
                 <div id="calc-capacity">
-                    수조의 물 용량은 약 <b id="capacity">100L</b>
+                    내 수조의 용량을 계산해보세요.
                 </div>
                 <div class="flex-box" id="search-container">
                     대충 검색창 위치
@@ -76,14 +76,19 @@
                 var tankHeight = document.getElementById("tank-height").value ; 
                 var tankDepth = document.getElementById("tank-depth").value;
                 var tankSand = document.getElementById("tank-sand").value;
+                var waterLevel = document.getElementById("water-level").value;
+                var tankWeight = document.getElementById("tank-wieght").value;
                 var tankWidth2 = tankWidth;
                 var tankHeight2 = tankHeight;
                 var tankDepth2 = tankDepth;
                 var tankSand2 = tankSand;
+                var waterLevel2 = waterLevel;
                 tankWidth *= s;
                 tankHeight *= s;
                 tankDepth *= s;
                 tankSand *= s;
+                waterLevel *= s;
+                
                 // alert(tankWidth*tankHeight*tankDepth);
                 
                 var front = document.getElementById("front");
@@ -93,8 +98,12 @@
                 var top = document.getElementById("top");
                 var bottom = document.getElementById("bottom");
                 var checkbox = document.getElementById("checkbox");
+                var tankArr = [front,back,left,right,top,bottom]
+                for (const key in tankArr){
+                    tankArr[key].innerHTML = "";
+                }
                 if (tankSand != ""){
-                    // var tankArr = document.querySelectorAll('.tank > div');
+                    
                     // console.log(tankArr);
                     var sand =`<div style='width:100%; height:${tankSand}px;position:absolute;bottom:0;background-color:rgba(150, 96, 29, 0.714);margin:0px'></div>`;
                     front.innerHTML = sand;
@@ -104,6 +113,18 @@
                     // bottom.innerHTML = `<div style='width:100%; height:100% background-color:rgba(150, 96, 29, 0.714);position:absolute; bottom:${tankSand}'></div>`;
                     
                 }
+                if (waterLevel != ""){
+                    // var tankArr = document.querySelectorAll('.tank > div');
+                    // console.log(tankArr);
+                    var sand =`<div style='width:100%; height:${waterLevel}px;position:absolute;top:0;background-color:rgba(255, 255, 255, 0.714);margin:0px'></div>`;
+                    front.innerHTML += sand;
+                    left.innerHTML += sand;
+                    right.innerHTML += sand;
+                    back.innerHTML += `<div style='width:100%; height:${waterLevel}px;position:absolute;bottom:0;background-color:rgba(255, 255, 255, 0.714);margin:0px'></div>`;
+                    // bottom.innerHTML = `<div style='width:100%; height:100% background-color:rgba(150, 96, 29, 0.714);position:absolute; bottom:${tankSand}'></div>`;
+                    
+                }
+
                 front.style.width = tankWidth + 'px';
                 front.style.height = tankHeight + 'px';
                 front.style.transform = '';
@@ -127,19 +148,33 @@
 
                 var containerWidth = document.querySelector('.tank-container').clientWidth;
                 var face = document.querySelectorAll('.face');
-                
+
+                // alert();
+
                 face.forEach(el => el.style.left = (containerWidth - Math.max(front.clientWidth,right.clientWidth))/2);
                 let mytank = tankWidth2 * tankDepth2 * tankHeight2/1000;
-                if (checkbox.checked)
-                    mytank = tankWidth2 * tankDepth2 * (tankHeight2-tankSand2)/1000;
-                    
+                var capacity = document.getElementById('calc-capacity') ;
+                if (checkbox.checked){
+                    var x = (((tankWidth2*10 * tankHeight2 * 10 * tankWeight * 2.5) /1000000) * 2);
+                    var y = (((tankHeight2*10 * tankDepth2 * 10 * tankWeight * 2.5) /1000000) * 2);
+                    var z = ((tankWidth2*10 * tankDepth2 * 10 * tankWeight * 2.5) /1000000);
+                    var sum = x+y+z;
+
+                    tankWidth2 -= tankWeight / 5;
+                    tankDepth2 -= tankWeight / 5;
+                    mytank = tankWidth2 * tankDepth2 * (tankHeight2-tankSand2-waterLevel2-tankWeight)/1000;
+                    capacity.innerHTML = `수조의 물 용량은 약 <b>${mytank.toFixed(2)}L</b><br>`
+                    capacity.innerHTML += `어항의 무게는 약 <b>${sum.toFixed(2)}kg</b>`;
+                }else{
+                    capacity.innerHTML = `수조의 물 용량은 약 <b>${mytank.toFixed(2)}L</b>`
+                }
 
                 
-                document.getElementById('capacity').innerText = `${mytank}L`
+                
                 
                 
             }
-           
+            
             checkbox.addEventListener('change', function() {
                 var detail = document.getElementById('detailed');
                 if(this.checked){
