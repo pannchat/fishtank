@@ -38,7 +38,8 @@
                     <input class="tanksize-input" id="water-level" type="input" placeholder="수위"/><span>cm</span>
                 </div>
             </div>
-                <div>
+                <div style="display:flex;justify-content: flex-end;width:100%">
+                    <span style="line-height: 30px;vertical-align: middle;font-size:1.3rem;color:#7d7d7d">상세 설정</span>
                     <label class="switch-button"> <input type="checkbox" id="checkbox"/> <span class="onoff-switch"></span> </label>
                 </div>
                 <input type="button" value="계산" onclick="calc()" style="width:100%;height:30px;border: none; background-color:rgb(125, 125, 125);color:whitesmoke"/>
@@ -71,7 +72,7 @@
         </div>
         <script>
             function calc(){
-                var s = 3;
+                var s = 100;
                 var tankWidth = document.getElementById("tank-width").value ;
                 var tankHeight = document.getElementById("tank-height").value ; 
                 var tankDepth = document.getElementById("tank-depth").value;
@@ -83,11 +84,27 @@
                 var tankDepth2 = tankDepth;
                 var tankSand2 = tankSand;
                 var waterLevel2 = waterLevel;
-                tankWidth *= s;
-                tankHeight *= s;
-                tankDepth *= s;
-                tankSand *= s;
-                waterLevel *= s;
+                var min = Math.min(tankWidth,tankDepth,tankHeight)
+                tankWidth = (tankWidth/min)*s;
+                tankHeight = (tankHeight/min)*s;
+                tankDepth = (tankDepth/min)*s;
+                tankSand = (tankSand/min)*s;
+                waterLevel = (waterLevel/min)*s
+                if(Math.max(tankWidth,tankDepth,tankHeight)>300){
+                    var scale = 300/Math.max(tankWidth,tankDepth,tankHeight);
+                    tankWidth *= scale;
+                    tankDepth *= scale;
+                    tankHeight *= scale;
+                    tankSand *= scale;
+                    waterLevel *= scale;
+                }
+                // console.log(tankWidth,tankDepth,tankHeight);
+                // if (max(tankWidth,tankDepth,tankHeight)< )
+                // tankWidth *= s;
+                // tankHeight *= s;
+                // tankDepth *= s;
+                // tankSand *= s;
+                // waterLevel *= s;
                 
                 // alert(tankWidth*tankHeight*tankDepth);
                 
@@ -107,6 +124,7 @@
                     // console.log(tankArr);
                     var sand =`<div style='width:100%; height:${tankSand}px;position:absolute;bottom:0;background-color:rgba(150, 96, 29, 0.714);margin:0px'></div>`;
                     front.innerHTML = sand;
+
                     left.innerHTML = sand;
                     right.innerHTML=sand;
                     back.innerHTML = `<div style='width:100%; height:${tankSand}px;position:absolute;top:0;background-color:rgba(150, 96, 29, 0.714);margin:0px'></div>`;
@@ -163,6 +181,7 @@
                     tankWidth2 -= tankWeight / 5;
                     tankDepth2 -= tankWeight / 5;
                     mytank = tankWidth2 * tankDepth2 * (tankHeight2-tankSand2-waterLevel2-tankWeight)/1000;
+
                     capacity.innerHTML = `수조의 물 용량은 약 <b>${mytank.toFixed(2)}L</b><br>`
                     capacity.innerHTML += `어항의 무게는 약 <b>${sum.toFixed(2)}kg</b>`;
                 }else{
