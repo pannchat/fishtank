@@ -54,7 +54,7 @@
                         <div>
                         <p style="font-weight:bold;font-size:1.1rem">네오 C</p>
                         권장 사용량 : 40L 당 10cc<br>
-                        내 어항 사용량 : 25cc 권장<br>
+                        내 어항 사용량 : <b id="item-01">?</b> 권장<br>
                         <a href="http://aquarioshop.co.kr/data/editor/goods/d5658512ff7f0340.jpg">상세 설명서 보기</a>
                         </div>
                     </div>
@@ -199,7 +199,8 @@
                     capacity.innerHTML = `수조의 물 용량은 약 <b>${mytank.toFixed(2)}L</b>`
                 }
 
-                
+                document.getElementById('item-01').innerHTML = `${(mytank/40*10).toFixed(2)}cc`;
+
                 
                 
                 
