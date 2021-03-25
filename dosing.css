@@ -75,16 +75,16 @@ div{
 }
 .tank-container{
     perspective: 1000px;
-    width:100%;
-    height:330px;
+    width:200px;
+    height:250px;
     margin-top:30px;
-    /* display:flex;
-    justify-content: center; */
+    display:flex;
+    justify-content: center;
 }
 .tank{
     margin:0px;
-    width:100%;
-    height:300px;
+    width:200px;
+    height:250px;
     animation: spin 15s infinite linear;
     display:block;
     box-sizing: content-box;
@@ -121,12 +121,13 @@ div{
     transform: translateY(45px) rotateX(-90deg);
 }
 .face {
+    margin:0px;
     padding:0px;
     width:100px;
     height:100px;
 	position: absolute;
-    top:50px;
-    left:100px;
+    top:80px;
+    left:50px;
     box-sizing: border-box;
     border: 5px solid #76899d;
     background-color: rgba(126, 200, 223, 0.3);

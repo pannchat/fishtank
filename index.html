@@ -39,7 +39,7 @@
                 </div>
             </div>
                 <div style="display:flex;justify-content: flex-end;width:100%">
-                    <span style="line-height: 30px;vertical-align: middle;font-size:1.3rem;color:#7d7d7d">상세 설정</span>
+                    <span style="margin:0 10px;line-height: 30px;vertical-align: middle;font-size:1.3rem;color:#7d7d7d">상세 설정</span>
                     <label class="switch-button"> <input type="checkbox" id="checkbox"/> <span class="onoff-switch"></span> </label>
                 </div>
                 <input type="button" value="계산" onclick="calc()" style="width:100%;height:30px;border: none; background-color:rgb(125, 125, 125);color:whitesmoke"/>
@@ -90,8 +90,8 @@
                 tankDepth = (tankDepth/min)*s;
                 tankSand = (tankSand/min)*s;
                 waterLevel = (waterLevel/min)*s
-                if(Math.max(tankWidth,tankDepth,tankHeight)>300){
-                    var scale = 300/Math.max(tankWidth,tankDepth,tankHeight);
+                if(Math.max(tankWidth,tankDepth,tankHeight)>200){
+                    var scale = 200/Math.max(tankWidth,tankDepth,tankHeight);
                     tankWidth *= scale;
                     tankDepth *= scale;
                     tankHeight *= scale;
@@ -172,7 +172,12 @@
 
                 face.forEach(
                     (el) =>{
-                        el.style.left = (containerWidth - Math.max(front.clientWidth,right.clientWidth))/2;
+                        if(tankWidth>tankDepth){
+                            el.style.left = (containerWidth/2) - (front.clientWidth/2);
+                        }
+                        else if(tankWidth<tankDepth){
+                            el.style.left = (containerWidth - Math.min(front.clientWidth,right.clientWidth))/2;
+                        }
                         el.style.top = (containerHeight -front.clientHeight)/2;
                     }
                     
@@ -181,14 +186,13 @@
                 var capacity = document.getElementById('calc-capacity') ;
                 if (checkbox.checked){
                     var x = (((tankWidth2*10 * tankHeight2 * 10 * tankWeight * 2.5) /1000000) * 2);
-                    var y = (((tankHeight2*10 * tankDepth2 * 10 * tankWeight * 2.5) /1000000) * 2);
-                    var z = ((tankWidth2*10 * tankDepth2 * 10 * tankWeight * 2.5) /1000000);
+                    var y = (((tankHeight2*10 * ((tankDepth2 * 10)-tankWeight*2) * tankWeight * 2.5) /1000000) * 2);
+                    var z = ((((tankWidth2*10) - tankWeight*2) * ((tankDepth2 * 10)-tankWeight*2) * tankWeight * 2.5) /1000000);
                     var sum = x+y+z;
 
                     tankWidth2 -= tankWeight / 5;
                     tankDepth2 -= tankWeight / 5;
-                    mytank = tankWidth2 * tankDepth2 * (tankHeight2-tankSand2-waterLevel2-tankWeight)/1000;
-
+                    mytank = tankWidth2 * tankDepth2 * (tankHeight2-tankSand2-waterLevel2-tankWeight/10)/1000;
                     capacity.innerHTML = `수조의 물 용량은 약 <b>${mytank.toFixed(2)}L</b><br>`
                     capacity.innerHTML += `어항의 무게는 약 <b>${sum.toFixed(2)}kg</b>`;
                 }else{
