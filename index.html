@@ -79,6 +79,7 @@
             <div class="md_overlay"></div>
             <div class="md_content">
                 <img src="./test.jpg">
+                <div id="close" style="border-radius: 50%;background-color: white; width:50px;height:50px;box-shadow:0 10px 20px rgba(0,0,0,0.20), 0 6px 6px rgba(0, 0, 0, 0.20);margin:0px;position: fixed;bottom:1%;left:50%;transform:translateX(-50%);">x</div>
             </div>
         </div>
         <script>
@@ -227,6 +228,7 @@
                 }
             })
             const openBtn = document.getElementById("open");
+            const closeBtn = document.getElementById("close");
             const modal = document.querySelector(".modal");
             const overlay = modal.querySelector(".md_overlay");
 
@@ -237,7 +239,9 @@
                 modal.classList.add("hidden")
             }
 
-            openBtn.addEventListener("click", openModal)
+            openBtn.addEventListener("click", openModal);
+            closeBtn.addEventListener("click", closeModal); 
+
         </script>
     </body>
 </html>
