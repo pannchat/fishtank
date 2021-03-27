@@ -193,7 +193,7 @@ div{
 .md_content{
     overflow: hidden;
     overflow-y: auto;
-    width: 80%;
+    width: 90%;
     height:90%;
     position: absolute;
     padding: 5px;
