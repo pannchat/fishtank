@@ -16,7 +16,7 @@
             dosage calculator
         </div>
         <div style="display:flex;justify-content: center;">
-        <div style="display:flex;justify-content: center;max-width: 720px;flex-wrap: wrap;">
+        <div style="display:flex;justify-content: center;max-width: 720px;flex-wrap: wrap;flex-basis: 720px;">
         <div class="flex-box">
             <div id="tank-preview">
                 <div class="tank-container">
@@ -60,7 +60,7 @@
                     <p style="font-weight:bold;font-size:1.1rem">네오 C</p>
                     권장 사용량 : 40L 당 10cc<br>
                     내 어항 사용량 : <b id="item-01">?</b> 권장<br>
-                    <a href="http://aquarioshop.co.kr/data/editor/goods/d5658512ff7f0340.jpg">상세 설명서 보기</a>
+                    <a href="#" id="open">상세 설명서 보기</a>
                     </div>
                 </div>
                 <div class="search-list">
@@ -74,6 +74,12 @@
                 </div>
             </div>
         </div>
+        </div>
+        <div class="modal hidden">
+            <div class="md_overlay"></div>
+            <div class="md_content">
+                <img src="http://aquarioshop.co.kr/data/editor/goods/d5658512ff7f0340.jpg">
+            </div>
         </div>
         <script>
             function calc(){
@@ -220,6 +226,18 @@
                     detail.style.display="none";
                 }
             })
+            const openBtn = document.getElementById("open");
+            const modal = document.querySelector(".modal");
+            const overlay = modal.querySelector(".md_overlay");
+
+            const openModal = () =>{
+                modal.classList.remove("hidden");
+            }
+            const closeModal = () => {
+                modal.classList.add("hidden")
+            }
+
+            openBtn.addEventListener("click", openModal)
         </script>
     </body>
 </html>
