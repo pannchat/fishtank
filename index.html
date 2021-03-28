@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>
-            dosing
+            어항 물양 계산
         </title>
         <link rel="stylesheet" href="./dosing.css" />
         <meta charset="utf-8">
@@ -17,11 +17,11 @@
         </div>
         <div style="display:flex;justify-content: center;">
         <div style="display:flex;justify-content: center;max-width: 720px;flex-wrap: wrap;flex-basis: 720px;">
-        <div class="flex-box">
+        <div class="flex-box" style="justify-content: start;">
             <div id="tank-preview">
                 <div class="tank-container">
                     <div class="tank">
-                        <div class="face" id="front"><b style="color:whitesmoke;">씨알이</b></div>
+                        <div class="face" id="front"><b style="color:whitesmoke;">fishhi.kr</b></div>
                         <div class="face" id="back"></div>
                         <div class="face" id="left"></div>
                         <div class="face" id="right"></div>
@@ -56,23 +56,51 @@
             <div class="flex-box" id="search-container">
                 대충 검색창 위치
                 <div class="search-list">
-                    <img src="./neoc.png" style="height:100px;">
-                    <div>
+                    <img src="./neoc.png" style="height:100px;width:100px;object-fit: contain;">
+                    <div style="min-width:200px">
                     <p style="font-weight:bold;font-size:1.1rem">네오 C</p>
                     권장 사용량 : 40L 당 10cc<br>
                     내 어항 사용량 : <b id="item-01">?</b> 권장<br>
                     <a href="#" id="open">상세 설명서 보기</a>
                     </div>
-                </div>
+                </div> 
                 <div class="search-list">
-                    <img src="./neoc.png" style="height:100px;">
-                    <div>
-                    <p style="font-weight:bold;font-size:1.1rem">네오 C</p>
+                    <img src="./neoa.png" style="height:100px;width:100px;object-fit: contain;">
+                    <div style="min-width:200px">
+                    <p style="font-weight:bold;font-size:1.1rem">네오 A</p>
                     권장 사용량 : 40L 당 10cc<br>
-                    내 어항 사용량 : 25cc 권장<br>
-                    <!-- <a href="http://aquarioshop.co.kr/data/editor/goods/d5658512ff7f0340.jpg">상세 설명서 보기</a> -->
+                    내 어항 사용량 : <b id="item-02">?</b> 권장<br>
+                    <a href="#" id="open">상세 설명서 보기</a>
+                    </div>
+                </div> 
+                <div class="search-list">
+                    <img src="./neov.png" style="height:100px;width:100px;object-fit: contain">
+                    <div style="min-width:200px">
+                    <p style="font-weight:bold;font-size:1.1rem">네오 V black</p>
+                    권장 사용량 : 40L 당 10cc<br>
+                    내 어항 사용량 : <b id="item-03">?</b> 권장<br>
+                    <a href="#" id="open">상세 설명서 보기</a>
                     </div>
                 </div>
+                <div class="search-list">
+                    <img src="./melafix.jpg" style="height:100px;width:100px;object-fit: contain">
+                    <div style="min-width:200px">
+                    <p style="font-weight:bold;font-size:1.1rem">멜라픽스</p>
+                    권장 사용량 : 38L 당 5cc<br>
+                    내 어항 사용량 : <b id="item-04">?</b> 권장<br>
+                    <a href="#" id="open">상세 설명서 보기</a>
+                    </div>
+                </div>
+                <div class="search-list">
+                    <img src="./pimafix.jpg" style="height:100px;width:100px;object-fit: contain">
+                    <div style="min-width:200px">
+                    <p style="font-weight:bold;font-size:1.1rem">피마픽스</p>
+                    권장 사용량 : 38L 당 5cc<br>
+                    내 어항 사용량 : <b id="item-05">?</b> 권장<br>
+                    <a href="#" id="open">상세 설명서 보기</a>
+                    </div>
+                </div>
+
             </div>
         </div>
         </div>
@@ -213,8 +241,10 @@
                 }
 
                 document.getElementById('item-01').innerHTML = `${(mytank/40*10).toFixed(2)}cc`;
-
-                
+                document.getElementById('item-02').innerHTML = `${(mytank/40*10).toFixed(2)}cc`;
+                document.getElementById('item-03').innerHTML = `${(mytank/40*10).toFixed(2)}cc`;
+                document.getElementById('item-04').innerHTML = `${(mytank/38*10).toFixed(2)}cc`;
+                document.getElementById('item-05').innerHTML = `${(mytank/38*10).toFixed(2)}cc`;
                 
                 
             }
