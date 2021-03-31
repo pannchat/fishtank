@@ -4,7 +4,7 @@
         <title>
             어항 물양 계산
         </title>
-        <link rel="stylesheet" href="./dosing.css" />
+        <link rel="stylesheet" href="{% static '/tankManage/css/index.css' %}" />
         <meta charset="utf-8">
         <meta name="viewport" 
           content="width=device-width, height=device-height, 
@@ -57,7 +57,7 @@
             <div class="flex-box" id="search-container">
                 대충 검색창 위치
                 <div class="search-list">
-                    <img src="./neoc.png" style="height:100px;width:100px;object-fit: contain;">
+                    <img src="{% static '/tankManage/img/neoc.png'%}" style="height:100px;width:100px;object-fit: contain;">
                     <div style="min-width:200px">
                     <p style="font-weight:bold;font-size:1.1rem">네오 C</p>
                     권장 사용량 : 40L 당 10cc<br>
@@ -66,7 +66,7 @@
                     </div>
                 </div> 
                 <div class="search-list">
-                    <img src="./neoa.png" style="height:100px;width:100px;object-fit: contain;">
+                    <img src="{% static '/tankManage/img/neoa.png'%}" style="height:100px;width:100px;object-fit: contain;">
                     <div style="min-width:200px">
                     <p style="font-weight:bold;font-size:1.1rem">네오 A</p>
                     권장 사용량 : 40L 당 10cc<br>
@@ -75,7 +75,7 @@
                     </div>
                 </div> 
                 <div class="search-list">
-                    <img src="./neov.png" style="height:100px;width:100px;object-fit: contain">
+                    <img src="{% static '/tankManage/img/neov.png'%}" style="height:100px;width:100px;object-fit: contain">
                     <div style="min-width:200px">
                     <p style="font-weight:bold;font-size:1.1rem">네오 V black</p>
                     권장 사용량 : 40L 당 10cc<br>
@@ -84,7 +84,7 @@
                     </div>
                 </div>
                 <div class="search-list">
-                    <img src="./melafix.jpg" style="height:100px;width:100px;object-fit: contain">
+                    <img src="{% static '/tankManage/img/melafix.jpg'%}" style="height:100px;width:100px;object-fit: contain">
                     <div style="min-width:200px">
                     <p style="font-weight:bold;font-size:1.1rem">멜라픽스</p>
                     권장 사용량 : 38L 당 5cc<br>
@@ -93,7 +93,7 @@
                     </div>
                 </div>
                 <div class="search-list">
-                    <img src="./pimafix.jpg" style="height:100px;width:100px;object-fit: contain">
+                    <img src="{% static '/tankManage/img/pimafix.jpg'%}" style="height:100px;width:100px;object-fit: contain">
                     <div style="min-width:200px">
                     <p style="font-weight:bold;font-size:1.1rem">피마픽스</p>
                     권장 사용량 : 38L 당 5cc<br>
@@ -108,7 +108,7 @@
         <div class="modal hidden">
             <div class="md_overlay"></div>
             <div class="md_content">
-                <img src="./test.jpg">
+
                 <div id="close" style="border-radius: 50%;background-color: white; width:50px;height:50px;box-shadow:0 10px 20px rgba(0,0,0,0.20), 0 6px 6px rgba(0, 0, 0, 0.20);margin:0px;position: fixed;bottom:1%;left:50%;transform:translateX(-50%);">x</div>
             </div>
         </div>

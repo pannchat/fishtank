@@ -23,8 +23,8 @@ div{
     justify-content: center;
     flex-direction: column;
     align-items: center;
-
-    width:100%;
+    flex:1 1 300px;
+    /* width:100%; */
 }
 #tank-preview{
     display:flex;
@@ -210,32 +210,4 @@ div{
 }
 .hidden {
     display:none;
-}
-#show{
-    padding:10px;
-    margin:0px;
-    width:100%;
-    max-width:600px;
-}
-
-/* search */
-
-.search-item{
-    display:flex;
-    background-color:white;
-    color:#669d90;
-    /* box-shadow: 10px 10px 10px rgb(187, 187, 187); */
-    margin:3px 0px;
-}
-.search-item a:visited{
-    color:#79bbac;
-}
-.search-item a:link{
-    color:#79bbac;
-    text-decoration-line: none;
-}
-.search-item p{ color:#3C4858; }
-#search_bar{
-    width:200px;
-    height:35px;
 }
