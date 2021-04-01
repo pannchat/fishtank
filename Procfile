@@ -1,1 +1,0 @@
-web: gunicorn fishhi_p.wsgi --log-file -
