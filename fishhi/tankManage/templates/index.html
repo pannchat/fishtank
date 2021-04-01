@@ -9,11 +9,11 @@
         <meta name="viewport" 
           content="width=device-width, height=device-height, 
                      minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0">
-        
+        <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
     </head>
     <body>
   
-        <div class="header">
+        <div class="header" onclick='location.href="http://127.0.0.1:8000"'>
             dosage calculator
             
         </div>
@@ -55,6 +55,11 @@
                         <div data-tooltip-text='세팅값이 복사되었습니다.' id="tooltip"></div>
                     </div>
                     </div>
+                    <a id="kakao-link-btn" href="javascript:sendLink()">
+                        <img width="30px"
+                          src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"
+                        />
+                      </a>
                 <div id="calc-capacity">
                     내 수조의 용량을 계산해보세요.
                 </div>
@@ -114,7 +119,7 @@
         <div class="modal hidden">
             <div class="md_overlay"></div>
             <div class="md_content">
-            test
+            <img src="https://pannchat.github.io/test.jpg">
                 <div id="close" style="border-radius: 50%;background-color: white; width:50px;height:50px;box-shadow:0 10px 20px rgba(0,0,0,0.20), 0 6px 6px rgba(0, 0, 0, 0.20);margin:0px;position: fixed;bottom:1%;left:50%;transform:translateX(-50%);"><img style="width:30px;position:absolute; top:50%;left:50%;transform:translate(-50%,-50%)" src="{% static 'tankManage/img/exit.svg' %}" /></div>
             </div>
         </div>
@@ -332,6 +337,24 @@
                 document.execCommand("copy");
                 sel.removeRange(range);
             }
-        </script>
+Kakao.init('{{javascript_key}}');
+            </script>
+         
+
+          <script type="text/javascript">
+            function sendLink() {
+              Kakao.Link.sendCustom({
+                templateId: 50869,
+                templateArgs: {
+                  title:
+                    '물생활엔 피쉬하이',
+                  description:
+                    '어항 상세 정보를 확인해보세요.',
+
+                },
+              })
+            }
+          </script>
+          
     </body>
 </html>

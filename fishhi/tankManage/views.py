@@ -17,6 +17,8 @@ def index(request):
     tankSand = request.GET.get('sand','' )
     waterLevel = request.GET.get('water','')
 
+    javascript_key = os.environ["JAVASCRIPT_KEY"]
+
     return render(request, 'index.html',{
         'tankWidth':tankWidth,
         'tankHeight':tankHeight,
@@ -24,7 +26,7 @@ def index(request):
         'tankWeight':tankWeight,
         'tankSand':tankSand,
         'waterLevel':waterLevel,
-
+        'javascript_key': javascript_key,
         })
 
 def list(request,keyword):

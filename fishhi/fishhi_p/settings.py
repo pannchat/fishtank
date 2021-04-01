@@ -25,7 +25,8 @@ SECRET_KEY = os.environ["INSTA_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 
 
 # Application definition
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -126,3 +128,5 @@ STATICFILES_DIRS = [
 ]   
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')  #static 파일들이 어디로 모일 것인지를 쓰는 곳.
+# Activate Django-Heroku.
+django_heroku.settings(locals())
