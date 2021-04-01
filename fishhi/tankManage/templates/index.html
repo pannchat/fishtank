@@ -9,12 +9,13 @@
         <meta name="viewport" 
           content="width=device-width, height=device-height, 
                      minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0">
-
+        
     </head>
     <body>
   
         <div class="header">
             dosage calculator
+            
         </div>
         <div style="display:flex;justify-content: center;">
         <div style="display:flex;justify-content: center;max-width: 720px;flex-wrap: wrap;flex-basis: 720px;">
@@ -36,7 +37,7 @@
                     <input class="tanksize-input" id="tank-height" type="input" placeholder="height"/><span>cm</span>
                 
                 <div id="detailed" display="none">
-                    <input class="tanksize-input" id="tank-wieght" type="input" placeholder="유리두께"/><span>T &nbsp;&nbsp;</span>
+                    <input class="tanksize-input" id="tank-weight" type="input" placeholder="유리두께"/><span>T &nbsp;&nbsp;</span>
                     <input class="tanksize-input" id="tank-sand" type="input" placeholder="바닥재"/><span>cm</span>
                     <input class="tanksize-input" id="water-level" type="input" placeholder="만수위까지"/><span>cm</span>
                     <span style="margin-top:10px;display: block;">수위는 만수위로 부터 몇 cm 남겨져 있는지 기입하시면 됩니다.</span>
@@ -46,14 +47,19 @@
                     <span style="margin:0 10px;line-height: 30px;vertical-align: middle;font-size:1.3rem;color:#7d7d7d">상세 설정</span>
                     <label class="switch-button"> <input type="checkbox" id="checkbox"/> <span class="onoff-switch"></span> </label>
                 </div>
-                <input type="button" value="계산" onclick="calc()" style="width:100%;height:30px;border: none; background-color:rgb(125, 125, 125);color:whitesmoke"/>
-
+                
+                <div class="flex-box" style="margin:0px;flex-direction: row;justify-content: flex-end;">
+                    <input type="button" value="계산" onclick="calc()" style="width:100%;height:30px;border: none; background-color:rgb(125, 125, 125);color:whitesmoke"/>
+                    <div id="clipboard"  onclick="tooltip()" style="margin-left:10px;background-color:#939393;width:30px;height:30px;position:relative">
+                        <img src="{%static 'tankManage/img/clipboard.svg'%}" style="position:absolute;width:20px;left:50%;top:50%;transform:translate(-50%,-50%)">
+                        <div data-tooltip-text='세팅값이 복사되었습니다.' id="tooltip"></div>
+                    </div>
+                    </div>
                 <div id="calc-capacity">
                     내 수조의 용량을 계산해보세요.
                 </div>
-                
-                </div>
             </div>
+            <div id="url"></div>
             <div class="flex-box" id="search-container">
                 대충 검색창 위치
                 <div class="search-list">
@@ -108,19 +114,42 @@
         <div class="modal hidden">
             <div class="md_overlay"></div>
             <div class="md_content">
-
-                <div id="close" style="border-radius: 50%;background-color: white; width:50px;height:50px;box-shadow:0 10px 20px rgba(0,0,0,0.20), 0 6px 6px rgba(0, 0, 0, 0.20);margin:0px;position: fixed;bottom:1%;left:50%;transform:translateX(-50%);">x</div>
+            test
+                <div id="close" style="border-radius: 50%;background-color: white; width:50px;height:50px;box-shadow:0 10px 20px rgba(0,0,0,0.20), 0 6px 6px rgba(0, 0, 0, 0.20);margin:0px;position: fixed;bottom:1%;left:50%;transform:translateX(-50%);"><img style="width:30px;position:absolute; top:50%;left:50%;transform:translate(-50%,-50%)" src="{% static 'tankManage/img/exit.svg' %}" /></div>
             </div>
         </div>
         <script>
+             var Width= document.getElementById("tank-width") ;
+             var Height= document.getElementById("tank-height");
+             var Depth= document.getElementById("tank-depth");
+             var Sand= document.getElementById("tank-sand");
+             var Level= document.getElementById("water-level");
+             var Weight= document.getElementById("tank-weight");
+             
+             Width.value ='{{tankWidth}}';
+             Height.value = '{{tankHeight}}';
+             Depth.value = '{{tankDepth}}';
+             Sand.value = '{{tankSand}}';
+             Level.value = '{{waterLevel}}';
+             Weight.value = '{{tankWeight}}';
+
+            if('{{tankWidth}}' ||'{{tankHeight}}'||'{{tankDepth}}'||'{{tankSand}}'||'{{tankLevel}}'||'{{tankWeight}}' ){
+                if('{{tankSand}}'|| '{{waterLevel}}' || '{{tankWeight}}')
+                {
+                    document.getElementById("checkbox").checked=true;
+                    document.getElementById('detailed').style.display = "block"
+                }
+                calc();
+            }
+                
             function calc(){
                 var s = 100;
-                var tankWidth = document.getElementById("tank-width").value ;
+                var tankWidth =document.getElementById("tank-width").value ;
                 var tankHeight = document.getElementById("tank-height").value ; 
                 var tankDepth = document.getElementById("tank-depth").value;
                 var tankSand = document.getElementById("tank-sand").value;
                 var waterLevel = document.getElementById("water-level").value;
-                var tankWeight = document.getElementById("tank-wieght").value;
+                var tankWeight = document.getElementById("tank-weight").value;
                 var tankWidth2 = tankWidth;
                 var tankHeight2 = tankHeight;
                 var tankDepth2 = tankDepth;
@@ -220,6 +249,10 @@
                         else if(tankWidth<tankDepth){
                             el.style.left = (containerWidth - Math.min(front.clientWidth,right.clientWidth))/2;
                         }
+                        else{
+                            el.style.left = (containerWidth - Math.min(front.clientWidth,right.clientWidth))/2;
+                        }
+                       
                         el.style.top = (containerHeight -front.clientHeight)/2;
                     }
                     
@@ -253,10 +286,12 @@
             checkbox.addEventListener('change', function() {
                 var detail = document.getElementById('detailed');
                 if(this.checked){
-                    
                     detail.style.display="block";
                 }else{
                     detail.style.display="none";
+                    Level.value = '';
+                    Weight.value= '';
+                    Sand.value='';
                 }
             })
             const openBtn = document.getElementById("open");
@@ -274,6 +309,29 @@
             openBtn.addEventListener("click", openModal);
             closeBtn.addEventListener("click", closeModal); 
 
+            function tooltip(){
+                var tankWidth = Width.value ;
+                var tankHeight = Height.value ; 
+                var tankDepth = Depth.value;
+                var tankSand = Sand.value;
+                var waterLevel = Level.value;
+                var tankWeight = Weight.value;
+                document.getElementById('tooltip').className='show';
+                setTimeout(() => {
+                    document.getElementById('tooltip').classList.remove('show')
+                }, 3000);
+
+                var url = document.getElementById('url');
+                url.innerText = `http://127.0.0.1:8000?width=${tankWidth}&height=${tankHeight}&depth=${tankDepth}&weight=${tankWeight}&sand=${tankSand}&water=${waterLevel}`;
+                // var sharedLink = "z";
+                var range = document.createRange();
+                range.selectNode(url.childNodes[0]);
+                var sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+                document.execCommand("copy");
+                sel.removeRange(range);
+            }
         </script>
     </body>
 </html>

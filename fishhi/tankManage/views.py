@@ -9,7 +9,23 @@ from django.http import HttpResponse
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    # if request.GET.get['width'] ==
+    tankWidth = request.GET.get('width','' )
+    tankHeight = request.GET.get('height','' )
+    tankDepth = request.GET.get('depth','' )
+    tankWeight = request.GET.get('weight','' )
+    tankSand = request.GET.get('sand','' )
+    waterLevel = request.GET.get('water','')
+
+    return render(request, 'index.html',{
+        'tankWidth':tankWidth,
+        'tankHeight':tankHeight,
+        'tankDepth':tankDepth,
+        'tankWeight':tankWeight,
+        'tankSand':tankSand,
+        'waterLevel':waterLevel,
+
+        })
 
 def list(request,keyword):
     client_id = os.environ["CLIENT_ID"]
@@ -37,4 +53,5 @@ def list(request,keyword):
     return HttpResponse(response_body, content_type="text/json-comment-filtered")
 
 def search(request):
-    return render(request, 'search.html')
+    keyword = request.GET.get('keyword','' )
+    return render(request, 'search.html' , {'keyword':keyword})

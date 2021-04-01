@@ -20,5 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', tankManage.views.index, name='index'),
     path('list/<str:keyword>', tankManage.views.list, name="list"),
-    path('search/', tankManage.views.search, name="search"),
+    path('search', tankManage.views.search, name="search"),
 ]
