@@ -1,0 +1,360 @@
+{%load static%}
+<html>
+    <head>
+        <title>
+            어항 물양 계산
+        </title>
+        <link rel="stylesheet" href="{% static '/tankManage/css/index.css' %}" />
+        <meta charset="utf-8">
+        <meta name="viewport" 
+          content="width=device-width, height=device-height, 
+                     minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0">
+        <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+    </head>
+    <body>
+  
+        <div class="header" onclick='location.href="http://127.0.0.1:8000"'>
+            dosage calculator
+            
+        </div>
+        <div style="display:flex;justify-content: center;">
+        <div style="display:flex;justify-content: center;max-width: 720px;flex-wrap: wrap;flex-basis: 720px;">
+        <div class="flex-box" style="justify-content: start;">
+            <div id="tank-preview">
+                <div class="tank-container">
+                    <div class="tank">
+                        <div class="face" id="front"><b style="color:whitesmoke;">fishhi.kr</b></div>
+                        <div class="face" id="back"></div>
+                        <div class="face" id="left"></div>
+                        <div class="face" id="right"></div>
+                        <div class="face" id="top"></div>
+                        <div class="face" id="bottom"></div>
+                    </div>
+                </div>
+                <div id="tanksize">
+                    <input class="tanksize-input" id="tank-width" type="input" placeholder="width"/><span>cm</span>
+                    <input class="tanksize-input" id="tank-depth" type="input" placeholder="depth"/><span>cm</span>
+                    <input class="tanksize-input" id="tank-height" type="input" placeholder="height"/><span>cm</span>
+                
+                <div id="detailed" display="none">
+                    <input class="tanksize-input" id="tank-weight" type="input" placeholder="유리두께"/><span>T &nbsp;&nbsp;</span>
+                    <input class="tanksize-input" id="tank-sand" type="input" placeholder="바닥재"/><span>cm</span>
+                    <input class="tanksize-input" id="water-level" type="input" placeholder="만수위까지"/><span>cm</span>
+                    <span style="margin-top:10px;display: block;">수위는 만수위로 부터 몇 cm 남겨져 있는지 기입하시면 됩니다.</span>
+                </div>
+            </div>
+                <div style="display:flex;justify-content: flex-end;width:100%">
+                    <span style="margin:0 10px;line-height: 30px;vertical-align: middle;font-size:1.3rem;color:#7d7d7d">상세 설정</span>
+                    <label class="switch-button"> <input type="checkbox" id="checkbox"/> <span class="onoff-switch"></span> </label>
+                </div>
+                
+                <div class="flex-box" style="margin:0px;flex-direction: row;justify-content: flex-end;">
+                    <input type="button" value="계산" onclick="calc()" style="width:100%;height:30px;border: none; background-color:rgb(125, 125, 125);color:whitesmoke"/>
+                    <div id="clipboard"  onclick="tooltip()" style="margin-left:10px;background-color:#939393;width:30px;height:30px;position:relative">
+                        <img src="{%static 'tankManage/img/clipboard.svg'%}" style="position:absolute;width:20px;left:50%;top:50%;transform:translate(-50%,-50%)">
+                        <div data-tooltip-text='세팅값이 복사되었습니다.' id="tooltip"></div>
+                    </div>
+                    </div>
+                    <a id="kakao-link-btn" href="javascript:sendLink()">
+                        <img width="30px"
+                          src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"
+                        />
+                      </a>
+                <div id="calc-capacity">
+                    내 수조의 용량을 계산해보세요.
+                </div>
+            </div>
+            <div id="url"></div>
+            <div class="flex-box" id="search-container">
+                대충 검색창 위치
+                <div class="search-list">
+                    <img src="{% static '/tankManage/img/neoc.png'%}" style="height:100px;width:100px;object-fit: contain;">
+                    <div style="min-width:200px">
+                    <p style="font-weight:bold;font-size:1.1rem">네오 C</p>
+                    권장 사용량 : 40L 당 10cc<br>
+                    내 어항 사용량 : <b id="item-01">?</b> 권장<br>
+                    <a href="#" id="open">상세 설명서 보기</a>
+                    </div>
+                </div> 
+                <div class="search-list">
+                    <img src="{% static '/tankManage/img/neoa.png'%}" style="height:100px;width:100px;object-fit: contain;">
+                    <div style="min-width:200px">
+                    <p style="font-weight:bold;font-size:1.1rem">네오 A</p>
+                    권장 사용량 : 40L 당 10cc<br>
+                    내 어항 사용량 : <b id="item-02">?</b> 권장<br>
+                    <a href="#" id="open">상세 설명서 보기</a>
+                    </div>
+                </div> 
+                <div class="search-list">
+                    <img src="{% static '/tankManage/img/neov.png'%}" style="height:100px;width:100px;object-fit: contain">
+                    <div style="min-width:200px">
+                    <p style="font-weight:bold;font-size:1.1rem">네오 V black</p>
+                    권장 사용량 : 40L 당 10cc<br>
+                    내 어항 사용량 : <b id="item-03">?</b> 권장<br>
+                    <a href="#" id="open">상세 설명서 보기</a>
+                    </div>
+                </div>
+                <div class="search-list">
+                    <img src="{% static '/tankManage/img/melafix.jpg'%}" style="height:100px;width:100px;object-fit: contain">
+                    <div style="min-width:200px">
+                    <p style="font-weight:bold;font-size:1.1rem">멜라픽스</p>
+                    권장 사용량 : 38L 당 5cc<br>
+                    내 어항 사용량 : <b id="item-04">?</b> 권장<br>
+                    <a href="#" id="open">상세 설명서 보기</a>
+                    </div>
+                </div>
+                <div class="search-list">
+                    <img src="{% static '/tankManage/img/pimafix.jpg'%}" style="height:100px;width:100px;object-fit: contain">
+                    <div style="min-width:200px">
+                    <p style="font-weight:bold;font-size:1.1rem">피마픽스</p>
+                    권장 사용량 : 38L 당 5cc<br>
+                    내 어항 사용량 : <b id="item-05">?</b> 권장<br>
+                    <a href="#" id="open">상세 설명서 보기</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </div>
+        <div class="modal hidden">
+            <div class="md_overlay"></div>
+            <div class="md_content">
+            <img src="https://pannchat.github.io/test.jpg">
+                <div id="close" style="border-radius: 50%;background-color: white; width:50px;height:50px;box-shadow:0 10px 20px rgba(0,0,0,0.20), 0 6px 6px rgba(0, 0, 0, 0.20);margin:0px;position: fixed;bottom:1%;left:50%;transform:translateX(-50%);"><img style="width:30px;position:absolute; top:50%;left:50%;transform:translate(-50%,-50%)" src="{% static 'tankManage/img/exit.svg' %}" /></div>
+            </div>
+        </div>
+        <script>
+             var Width= document.getElementById("tank-width") ;
+             var Height= document.getElementById("tank-height");
+             var Depth= document.getElementById("tank-depth");
+             var Sand= document.getElementById("tank-sand");
+             var Level= document.getElementById("water-level");
+             var Weight= document.getElementById("tank-weight");
+             
+             Width.value ='{{tankWidth}}';
+             Height.value = '{{tankHeight}}';
+             Depth.value = '{{tankDepth}}';
+             Sand.value = '{{tankSand}}';
+             Level.value = '{{waterLevel}}';
+             Weight.value = '{{tankWeight}}';
+
+            if('{{tankWidth}}' ||'{{tankHeight}}'||'{{tankDepth}}'||'{{tankSand}}'||'{{tankLevel}}'||'{{tankWeight}}' ){
+                if('{{tankSand}}'|| '{{waterLevel}}' || '{{tankWeight}}')
+                {
+                    document.getElementById("checkbox").checked=true;
+                    document.getElementById('detailed').style.display = "block"
+                }
+                calc();
+            }
+                
+            function calc(){
+                var s = 100;
+                var tankWidth =document.getElementById("tank-width").value ;
+                var tankHeight = document.getElementById("tank-height").value ; 
+                var tankDepth = document.getElementById("tank-depth").value;
+                var tankSand = document.getElementById("tank-sand").value;
+                var waterLevel = document.getElementById("water-level").value;
+                var tankWeight = document.getElementById("tank-weight").value;
+                var tankWidth2 = tankWidth;
+                var tankHeight2 = tankHeight;
+                var tankDepth2 = tankDepth;
+                var tankSand2 = tankSand;
+                var waterLevel2 = waterLevel;
+                var min = Math.min(tankWidth,tankDepth,tankHeight)
+                tankWidth = (tankWidth/min)*s;
+                tankHeight = (tankHeight/min)*s;
+                tankDepth = (tankDepth/min)*s;
+                tankSand = (tankSand/min)*s;
+                waterLevel = (waterLevel/min)*s
+                if(Math.max(tankWidth,tankDepth,tankHeight)>200){
+                    var scale = 200/Math.max(tankWidth,tankDepth,tankHeight);
+                    tankWidth *= scale;
+                    tankDepth *= scale;
+                    tankHeight *= scale;
+                    tankSand *= scale;
+                    waterLevel *= scale;
+                }
+                // console.log(tankWidth,tankDepth,tankHeight);
+                // if (max(tankWidth,tankDepth,tankHeight)< )
+                // tankWidth *= s;
+                // tankHeight *= s;
+                // tankDepth *= s;
+                // tankSand *= s;
+                // waterLevel *= s;
+                
+                // alert(tankWidth*tankHeight*tankDepth);
+                
+                var front = document.getElementById("front");
+                var back = document.getElementById("back");
+                var left = document.getElementById("left");
+                var right = document.getElementById("right");
+                var top = document.getElementById("top");
+                var bottom = document.getElementById("bottom");
+                var checkbox = document.getElementById("checkbox");
+                var tankArr = [front,back,left,right,top,bottom]
+                for (const key in tankArr){
+                    tankArr[key].innerHTML = "";
+                }
+                if (tankSand != ""){
+                    
+                    // console.log(tankArr);
+                    var sand =`<div style='width:100%; height:${tankSand}px;position:absolute;bottom:0;background-color:rgba(150, 96, 29, 0.714);margin:0px'></div>`;
+                    front.innerHTML = sand;
+
+                    left.innerHTML = sand;
+                    right.innerHTML=sand;
+                    back.innerHTML = `<div style='width:100%; height:${tankSand}px;position:absolute;top:0;background-color:rgba(150, 96, 29, 0.714);margin:0px'></div>`;
+                    // bottom.innerHTML = `<div style='width:100%; height:100% background-color:rgba(150, 96, 29, 0.714);position:absolute; bottom:${tankSand}'></div>`;
+                    
+                }
+                if (waterLevel != ""){
+                    // var tankArr = document.querySelectorAll('.tank > div');
+                    // console.log(tankArr);
+                    var sand =`<div style='width:100%; height:${waterLevel}px;position:absolute;top:0;background-color:rgba(255, 255, 255, 0.714);margin:0px'></div>`;
+                    front.innerHTML += sand;
+                    left.innerHTML += sand;
+                    right.innerHTML += sand;
+                    back.innerHTML += `<div style='width:100%; height:${waterLevel}px;position:absolute;bottom:0;background-color:rgba(255, 255, 255, 0.714);margin:0px'></div>`;
+                    // bottom.innerHTML = `<div style='width:100%; height:100% background-color:rgba(150, 96, 29, 0.714);position:absolute; bottom:${tankSand}'></div>`;
+                    
+                }
+
+                front.style.width = tankWidth + 'px';
+                front.style.height = tankHeight + 'px';
+                front.style.transform = '';
+                front.style.transform = 'translateZ(' + (tankDepth/2) +'px)';
+                back.style.width = tankWidth + 'px';
+                back.style.transform = 'rotate(-180deg) translateZ(' + -(tankDepth/2) +'px)';
+                back.style.height = tankHeight + 'px';
+                left.style.width = tankDepth + 'px';
+                left.style.transform = 'translateX(' + -((tankDepth/2)) +'px) rotateY(90deg)';
+                // left.setAttribute("transform",`translateX(-${tankDepth}px) rotateY(190deg)`);
+                left.style.height = tankHeight + 'px';
+                right.style.width = tankDepth + 'px';
+                right.style.height = tankHeight + 'px';
+                right.style.transform = 'translateX(' +  (tankWidth - tankDepth + tankDepth/2) +'px) rotateY(90deg)';
+                top.style.width = tankWidth + 'px';
+                top.style.height = tankDepth + 'px';
+                top.style.transform = 'translateY(' + -(tankDepth/2) + 'px) rotateX(90deg)';
+                bottom.style.width = tankWidth + 'px';
+                bottom.style.height = tankDepth + 'px';
+                bottom.style.transform = 'translateY(' + (tankHeight - tankDepth + tankDepth/2) + 'px) rotateX(90deg)';
+
+                var containerWidth = document.querySelector('.tank-container').clientWidth;
+                var containerHeight = document.querySelector('.tank-container').clientHeight;
+                var face = document.querySelectorAll('.face');
+
+                // alert();
+
+                face.forEach(
+                    (el) =>{
+                        if(tankWidth>tankDepth){
+                            el.style.left = (containerWidth/2) - (front.clientWidth/2);
+                        }
+                        else if(tankWidth<tankDepth){
+                            el.style.left = (containerWidth - Math.min(front.clientWidth,right.clientWidth))/2;
+                        }
+                        else{
+                            el.style.left = (containerWidth - Math.min(front.clientWidth,right.clientWidth))/2;
+                        }
+                       
+                        el.style.top = (containerHeight -front.clientHeight)/2;
+                    }
+                    
+                    );
+                let mytank = tankWidth2 * tankDepth2 * tankHeight2/1000;
+                var capacity = document.getElementById('calc-capacity') ;
+                if (checkbox.checked){
+                    var x = (((tankWidth2*10 * tankHeight2 * 10 * tankWeight * 2.5) /1000000) * 2);
+                    var y = (((tankHeight2*10 * ((tankDepth2 * 10)-tankWeight*2) * tankWeight * 2.5) /1000000) * 2);
+                    var z = ((((tankWidth2*10) - tankWeight*2) * ((tankDepth2 * 10)-tankWeight*2) * tankWeight * 2.5) /1000000);
+                    var sum = x+y+z;
+
+                    tankWidth2 -= tankWeight / 5;
+                    tankDepth2 -= tankWeight / 5;
+                    mytank = tankWidth2 * tankDepth2 * (tankHeight2-tankSand2-waterLevel2-tankWeight/10)/1000;
+                    capacity.innerHTML = `수조의 물 용량은 약 <b>${mytank.toFixed(2)}L</b><br>`
+                    capacity.innerHTML += `어항의 무게는 약 <b>${sum.toFixed(2)}kg</b>`;
+                }else{
+                    capacity.innerHTML = `수조의 물 용량은 약 <b>${mytank.toFixed(2)}L</b>`
+                }
+
+                document.getElementById('item-01').innerHTML = `${(mytank/40*10).toFixed(2)}cc`;
+                document.getElementById('item-02').innerHTML = `${(mytank/40*10).toFixed(2)}cc`;
+                document.getElementById('item-03').innerHTML = `${(mytank/40*10).toFixed(2)}cc`;
+                document.getElementById('item-04').innerHTML = `${(mytank/38*10).toFixed(2)}cc`;
+                document.getElementById('item-05').innerHTML = `${(mytank/38*10).toFixed(2)}cc`;
+                
+                
+            }
+            
+            checkbox.addEventListener('change', function() {
+                var detail = document.getElementById('detailed');
+                if(this.checked){
+                    detail.style.display="block";
+                }else{
+                    detail.style.display="none";
+                    Level.value = '';
+                    Weight.value= '';
+                    Sand.value='';
+                }
+            })
+            const openBtn = document.getElementById("open");
+            const closeBtn = document.getElementById("close");
+            const modal = document.querySelector(".modal");
+            const overlay = modal.querySelector(".md_overlay");
+
+            const openModal = () =>{
+                modal.classList.remove("hidden");
+            }
+            const closeModal = () => {
+                modal.classList.add("hidden")
+            }
+
+            openBtn.addEventListener("click", openModal);
+            closeBtn.addEventListener("click", closeModal); 
+
+            function tooltip(){
+                var tankWidth = Width.value ;
+                var tankHeight = Height.value ; 
+                var tankDepth = Depth.value;
+                var tankSand = Sand.value;
+                var waterLevel = Level.value;
+                var tankWeight = Weight.value;
+                document.getElementById('tooltip').className='show';
+                setTimeout(() => {
+                    document.getElementById('tooltip').classList.remove('show')
+                }, 3000);
+
+                var url = document.getElementById('url');
+                url.innerText = `http://127.0.0.1:8000?width=${tankWidth}&height=${tankHeight}&depth=${tankDepth}&weight=${tankWeight}&sand=${tankSand}&water=${waterLevel}`;
+                // var sharedLink = "z";
+                var range = document.createRange();
+                range.selectNode(url.childNodes[0]);
+                var sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+                document.execCommand("copy");
+                sel.removeRange(range);
+            }
+Kakao.init('{{javascript_key}}');
+            </script>
+         
+
+          <script type="text/javascript">
+            function sendLink() {
+              Kakao.Link.sendCustom({
+                templateId: 50869,
+                templateArgs: {
+                  title:
+                    '물생활엔 피쉬하이',
+                  description:
+                    '어항 상세 정보를 확인해보세요.',
+
+                },
+              })
+            }
+          </script>
+          
+    </body>
+</html>
