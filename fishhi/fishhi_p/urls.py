@@ -21,4 +21,5 @@ urlpatterns = [
     path('', tankManage.views.index, name='index'),
     path('list/<str:keyword>', tankManage.views.list, name="list"),
     path('search', tankManage.views.search, name="search"),
+    path('feed', tankManage.views.feed, name="feed"),
 ]

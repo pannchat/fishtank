@@ -3,10 +3,13 @@ import os
 import sys
 import urllib.request
 import json
+import requests,random
+from bs4 import BeautifulSoup
 from django.shortcuts import render
 from django.core import serializers
 from django.http import HttpResponse
-
+import tankManage.views
+import json
 # Create your views here.
 def index(request):
     # if request.GET.get['width'] ==
@@ -56,4 +59,15 @@ def list(request,keyword):
 
 def search(request):
     keyword = request.GET.get('keyword','' )
-    return render(request, 'search.html' , {'keyword':keyword})
+    return render(request, 'search.html' , {'keyword':keyword, 'blog':blog_feed(3)})
+
+def feed(request):
+    return render(request, 'feed.html',{'blog':blog_feed(10)})
+
+def blog_feed(n):
+    print(n)
+    pwd = os.path.dirname(__file__)
+    with open(pwd + '/blog.json') as f:
+        blog = json.load(f)
+    # print(blog)
+    return blog[:n]

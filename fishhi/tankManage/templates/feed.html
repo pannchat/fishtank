@@ -1,0 +1,75 @@
+{%load static%}
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static '/tankManage/css/feed.css' %}" />
+        <meta charset="utf-8">
+        <meta name="viewport" 
+          content="width=device-width, height=device-height, 
+                     minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0">
+    </head>
+    <body> 
+
+        <form id="content">
+            <input type="text" name="input" class="input" id="search-input">
+            <button type="reset" class="search" id="search-btn"></button>
+        </form>
+        <div class="flex-box">
+        <div class="header">
+        Category
+        </div>
+        <div style="color:#8c98a4;width:90%;margin:10px;">gae sibal jonna himdulda</div>
+        
+        <div style="display:flex; justify-content: space-between;width:100%;color:#7c838a;margin:10px;">
+            <div class="flex-box">
+                <div style="border-radius: 10px;width:60px;height: 60px;background-color: #bac5d0; margin:10px 0px">
+                    <img src="{% static '/tankManage/img/aquarium.png' %}" style="width:30px;position: relative;left:50%;top:50%;transform: translate(-50%,-50%);">
+                </div>
+                <span>#어항계산</span>
+            </div>
+            <div class="flex-box">
+                <div style="border-radius: 10px;width:60px;height: 60px;background-color: #e4e8c6; margin:10px 0px">
+                    <img src="{% static '/tankManage/img/leaves.svg' %}" style="width:30px;position: relative;left:50%;top:50%;transform: translate(-50%,-50%);">
+                </div>
+                <span>#수초찾기</span>
+            </div>
+            <div class="flex-box">
+                <div style="border-radius: 10px;width:60px;height: 60px;background-color: #bfd3f2; margin:10px 0px">
+                    <img src="{% static '/tankManage/img/aquarium.png' %}" style="width:30px;position: relative;left:50%;top:50%;transform: translate(-50%,-50%);">
+                </div>
+                <span>#레이아웃</span>
+            </div>
+            <div class="flex-box">
+                <div style="border-radius: 10px;width:60px;height: 60px;background-color: #bac5d0; margin:10px 0px">
+                    <img src="{% static '/tankManage/img/aquarium.png' %}" style="width:30px;position: relative;left:50%;top:50%;transform: translate(-50%,-50%);">
+                </div>
+                <span>#최저가</span>
+            </div>
+        </div>
+        <div style="display:flex; justify-content: center;width:90%">
+            
+            <div class="flex-box">
+
+            {% for i in blog%}
+            <div onclick="location.href='{{i.link}}'" style="cursor:pointer;width:100%">
+                <img src="{{i.img}}" style="width:100%;border-radius: 10px;">
+                <div style="width:100%;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;">{{i.title}}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+        </div>
+    </div>
+        <script>
+            const input = document.getElementById("search-input");
+            const searchBtn = document.getElementById("search-btn");
+
+            const expand = () =>{
+                searchBtn.classList.toggle("close");
+                input.classList.toggle("square");
+            };
+            searchBtn.addEventListener("click",expand)
+            // document.getElementById("test").innerHTML = `{{obj}}`;
+        </script>
+    </body>
+</html>
