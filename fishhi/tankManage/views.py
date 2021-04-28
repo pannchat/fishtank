@@ -157,6 +157,9 @@ def create_fishtank(request):
         content = request.POST['contents']
         public = request.POST['public']
         changewater = request.POST['changewater']
+        width = request.POST['width']
+        depth = request.POST['depth']
+        height = request.POST['height']
         if request.POST['start'] != '':
             start = datetime.datetime.strptime(request.POST['start'],"%Y-%m-%d").date()
         else:
@@ -172,7 +175,7 @@ def create_fishtank(request):
             thumbnail = None
         username = request.user
 
-        Feeds = Feed.objects.create(title=title, username=username, contents=content, public=public,thumbnail=thumbnail,changewater=changewater,start=start)
+        Feeds = Feed.objects.create(title=title, username=username, contents=content, public=public,thumbnail=thumbnail,changewater=changewater,start=start,width=width,depth=depth,height=height)
 
         if Feeds.thumbnail:
             thumbnail = Feeds.thumbnail.url

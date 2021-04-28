@@ -327,7 +327,7 @@
                 }, 3000);
 
                 var url = document.getElementById('url');
-                url.innerText = `http://127.0.0.1:8000?width=${tankWidth}&height=${tankHeight}&depth=${tankDepth}&weight=${tankWeight}&sand=${tankSand}&water=${waterLevel}`;
+                url.innerText = `http://192.168.0.103:8000/calc?width=${tankWidth}&height=${tankHeight}&depth=${tankDepth}&weight=${tankWeight}&sand=${tankSand}&water=${waterLevel}`;
                 // var sharedLink = "z";
                 var range = document.createRange();
                 range.selectNode(url.childNodes[0]);

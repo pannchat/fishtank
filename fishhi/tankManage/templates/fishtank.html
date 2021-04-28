@@ -38,8 +38,10 @@
             height:80px;
             object-fit:cover;
         }
-        img + h1{
+        #head-cover > h1,h3{
             color: #3c3c3c;
+            margin:0;
+            padding:5px 10px;
         }
 
         .fish-section{
@@ -183,33 +185,62 @@ header>input[type="button"] + label{
 }
 #head-cover{
 
-position: relative;
+
 
 width:100%;
 background-color: #8aa1a1;
-border-radius: 20px 20px 20px 0;
-left:50%;
+border-radius: 20px;
 
-transform: translate(-50%);
--webkit-transform: translate(-50%);
-
-
+margin-bottom:20px;
 background-repeat: no-repeat;
 background-size: 100%;
 background-position-x:right;
-margin-bottom: 10px;
+
+
 
 }
 
+
     </style>
     <body>
-        <!-- <div id = "head-cover" > -->
+
+        <div id = "head-cover" >
             <h1>{{fishtank.title}}</h1>
-            <img style="margin:10px 0;padding:10px;box-sizing: border-box;border-radius: 20px 20px 20px 0;" width="100%"src="/media/{{fishtank.thumbnail}}">
-            <!-- <div style="margin-top:-10px;width:30%;background-color: #8aa1a1;border-radius: 0 0 20px 0;height:100px;"></div> -->
-        <!-- </div> -->
-     
+            <h3>{{fishtank.contents}}</h3>
+            <img style="position:relative; z-index:2;padding:0 0 0 10px;top:10px;box-sizing: border-box;border-radius: 20px;position:relateive;" width="100%"src="/media/{{fishtank.thumbnail}}">
+
+       
+        </div>
+
+        <style>
+
+        </style>
+        
         <section>
+            
+            <style>
+                ul {
+                    white-space: nowrap;
+                    padding:0px;
+                    margin:0 auto;
+                    overflow:hidden;
+                }
+                ul > li {
+                    display:inline-block;
+                    vertical-align: top;
+                    width:100%;
+                    transition: all .5s;
+                }
+                section [id="slide01"]:checked ~ ul > li {
+                    transform:translateX(0%);
+                }
+                section [id="slide02"]:checked ~ ul > li {
+                    transform:translateX(-100%);
+                }
+                section [id="slide03"]:checked ~ ul > li {
+                    transform:translateX(-200%);
+                }
+            </style>
             <input type="radio" name="slide" id="slide01"/>
             <input type="radio" name="slide" id="slide02"/>
             <input type="radio" name="slide" id="slide03"/>
@@ -330,13 +361,17 @@ margin-bottom: 10px;
                 {% endfor %}
             </article>
 
-            <div class="modal-back"></div>
-            <div class="modal-body">
+         
 
             </div>
             </div>
             </li>
+            <li>
+                <a href="http://192.168.0.103:8000/calc?width=30&height=30&depth=30">{{fishtank.width}} * {{fishtank.depth}} * {{fishtank.height}} </a>
+            </li>
         </ul>
+        <div class="modal-back"></div>
+        <div class="modal-body">
         </section>
         <script>
 
