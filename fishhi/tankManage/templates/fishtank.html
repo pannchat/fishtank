@@ -1,0 +1,603 @@
+{% load static %}
+{% load humanize %}
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="theme-color" content="#e9e8e4">
+        <meta name="viewport" 
+        content="width=device-width, height=device-height, 
+                    minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0">
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/css/datepicker-foundation.min.css">
+                    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/js/datepicker-full.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/js/locales/ko.js"></script>
+                </head>
+    <style>
+        body{
+            background-color: #e9e8e4;
+        }
+        section{
+            width:100%;
+            background-color:white;
+            z-index:1;
+            position:relative;
+            border-radius: 10px;
+        }
+        header{
+            display:flex;
+            justify-content: space-between;
+        }
+        header > h2{
+            margin:0px;
+            padding:10px 10px;
+            color : #3c3c3c;
+        }
+
+        figure > img{
+            width:80px;
+            height:80px;
+            object-fit:cover;
+        }
+        img + h1{
+            color: #3c3c3c;
+        }
+
+        .fish-section{
+            display:flex;
+            width:300px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box; /* 파이어폭스(Firefox)*/
+            -webkit-box-sizing: border-box; /* 웹킷(Webkit) & 크롬(Chrome) */
+            position:relative;
+            border:none;
+            margin:5px;
+            padding:10px;
+            transition: all .3s;
+        }
+        .fish-section > div> h3{
+            margin: 5px 0;
+        }
+        .show{
+            visibility: hidden;
+            height:0px;
+            padding:0px;
+            width:0px;
+            margin:0px;
+
+        }
+        
+    figure {
+
+        display: flex;
+        flex-flow: column;
+        margin:0px;
+        max-width: 100px;
+
+}
+figcaption {
+    background-color: rgba(34,34,34,0.4);
+    color: #fff;
+    font: italic smaller sans-serif;
+    padding: 3px;
+    text-align: center;
+    margin-top:-20px;
+}
+h3 > b{
+    font-size:10pt;
+}
+/* 모달 */
+.modal-back{
+                display:none;
+                width:100%;
+                height:100%;
+                background-color: rgba(0,0,0,0.5);
+                position:fixed;
+                top:0;
+                left:0;
+                overflow-y: hidden;
+
+            }
+            .modal-body{
+                border-radius:7px;
+                width:90%;
+                height:390px;
+                background-color:white;
+                overflow-y:auto;
+                overflow: hidden;
+                position:fixed;
+                top:50%;
+                left:50%;
+                transform:translate(-50%,-50%);
+                display:none;
+            }
+            .input{
+                margin:10px 0;
+                position:relative;
+                width:100%;
+            }
+            .inputs{
+                background: transparent;
+                border:none;
+                border-bottom: solid 1px #ccc;
+                padding: 20px 2px 5px;
+                transition: padding 0.4s;
+                font-size: 14pt;
+                width:100%;
+            }
+            .inputs:placeholder-shown+.labels{
+                color:#aaa;
+                font-size: 14pt;
+                top:15px;
+            }
+            .inputs:focus + .labels, .labels{
+                color:#eab69a;
+                font-size:10pt;
+                pointer-events:none;
+                position:absolute;
+                left:2px;
+                top:2px;
+                transition:top 0.2s,left 0.2s, font-size 0.2s;
+            }
+            .inputs::placeholder{
+                color:transparent;
+                display:none;
+            }
+            .inputs:focus,.inputs:not(:placeholder-shown){
+                border-bottom:solid 1px #eab69a;
+                outline:none;
+            }
+            #click{
+                border:none;
+                background-color: #eab69a;
+                width:100%;
+                height:40px;
+                position:absolute;
+                bottom:0;
+            }
+            select {
+  width: 100%;
+  padding: .8em .5em;
+  font-family: inherit;
+  background: url(https://farm1.staticflickr.com/379/19928272501_4ef877c265_t.jpg) no-repeat 95% 50%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 1px solid #999;
+  border-radius: 0px;
+}
+
+select::-ms-expand {
+  /* for IE 11 */
+  display: none;
+}
+header>input[type="button"]{
+    display:none;
+}
+header>input[type="button"] + label{
+    position:relative;
+    box-sizing: border-box;
+
+    padding:10px;
+    width:35px;
+
+}
+#head-cover{
+
+position: relative;
+
+width:100%;
+background-color: #8aa1a1;
+border-radius: 20px 20px 20px 0;
+left:50%;
+
+transform: translate(-50%);
+-webkit-transform: translate(-50%);
+
+
+background-repeat: no-repeat;
+background-size: 100%;
+background-position-x:right;
+margin-bottom: 10px;
+
+}
+
+    </style>
+    <body>
+        <!-- <div id = "head-cover" > -->
+            <h1>{{fishtank.title}}</h1>
+            <img style="margin:10px 0;padding:10px;box-sizing: border-box;border-radius: 20px 20px 20px 0;" width="100%"src="/media/{{fishtank.thumbnail}}">
+            <!-- <div style="margin-top:-10px;width:30%;background-color: #8aa1a1;border-radius: 0 0 20px 0;height:100px;"></div> -->
+        <!-- </div> -->
+     
+        <section>
+            <input type="radio" name="slide" id="slide01"/>
+            <input type="radio" name="slide" id="slide02"/>
+            <input type="radio" name="slide" id="slide03"/>
+            <ul>
+                <li>
+            
+            <article>
+                <header>
+                    <h2>Fish</h2>
+                    
+                    <input type="button" id="add_fish"/>
+                    <label for="add_fish">
+                        <!-- <img src="{%static 'tankManage/img/fish.svg'%}" style="width:40px;position: absolute;left:50%;top:50%;transform:translate(-50%,-50%);">  -->
+                        <img src="{%static 'tankManage/img/plus2.svg'%}" style="width:20px;position: absolute;left:50%;top:50%;transform:translate(-50%,-50%);"> </label>
+                </header>
+
+                {% for fish in fishes%}
+                
+                <div class="fish-section">
+                    <figure>
+                        {% if fish.img %}
+                            <img  src="/media/{{fish.img}}" alt="{{fish.name}} 사진">
+                        {%else%}
+                            <img src="" alt="default" />
+                        {% endif %}
+                        {% if fish.hmf and fish.sex %}
+                        <figcaption>
+                            {%if fish.hmf != 0 %}
+                                {{fish.hmf}}마리 
+                            {% endif %}
+                            {% if fish.hmf and fish.sex %}
+                                
+                            {% endif %}
+                            <b id="Dday">+45일</b>
+                        </figcaption>
+                        {%endif%}
+                    </figure>
+                    <div style="padding:0 10px">
+                        <h3>{{fish.name}}
+                            <b>                            
+                                {% if fish.sex == 'F'%}
+                                    <img  style="width:18px" src="{% static 'tankManage/img/female.svg'%}"/>
+                                {% elif fish.sex == 'M'%}
+                                <img  style="width:18px" src="{% static 'tankManage/img/male.svg'%}"/>
+                                {%endif%}
+                            </b>
+                        </h3>
+                        입수일 : {{today|date:'Y/m/d'}} <br>
+                        분양비용 : {{fish.price |intcomma }} 원
+                    </div>
+                </div>
+                {% endfor %}
+            </article>
+            <article>
+                <header>
+                    <h2>Plants</h2>
+                    <input type="button" id="add_plant"/>
+                    <label for="add_plant">
+                        <!-- <img src="{%static 'tankManage/img/fish.svg'%}" style="width:40px;position: absolute;left:50%;top:50%;transform:translate(-50%,-50%);">  -->
+                        <img src="{%static 'tankManage/img/plus2.svg'%}" style="width:20px;position: absolute;left:50%;top:50%;transform:translate(-50%,-50%);"> </label>
+                </header>
+
+                {% for plant in plants%}
+                
+                <div class="fish-section">
+                    <figure>
+                        {% if plant.img %}
+                            <img  src="/media/{{plant.img}}" alt="{{plant.name}} 사진">
+                        {%else%}
+                            <img src="" alt="default" />
+                        {% endif %}
+
+                        <figcaption>
+                            <b id="Dday">+45일</b>
+                        </figcaption>
+
+                    </figure>
+                    <div style="padding:0 10px">
+                        <h3>{{plant.name}}
+                        </h3>
+                        입수일 : {{plant.get|date:'Y/m/d'}} <br>
+                        분양비용 : {{plant.price |intcomma }} 원
+                    </div>
+                </div>
+                {% endfor %}
+            </article>
+            <article>
+                <header>
+                    <h2>Supplies</h2>
+                    <input type="button" id="add_supplies"/>
+                    <label for="add_supplies">
+                        <!-- <img src="{%static 'tankManage/img/fish.svg'%}" style="width:40px;position: absolute;left:50%;top:50%;transform:translate(-50%,-50%);">  -->
+                        <img src="{%static 'tankManage/img/plus2.svg'%}" style="width:20px;position: absolute;left:50%;top:50%;transform:translate(-50%,-50%);"> </label>
+                </header>
+
+                {% for supply in supplies%}
+                
+                <div class="fish-section">
+                    <figure>
+                        {% if supply.img %}
+                            <img  src="/media/{{supply.img}}" alt="{{supply.name}} 사진">
+                        {%else%}
+                            <img src="" alt="default" />
+                        {% endif %}
+
+                        <figcaption>
+                            <b id="Dday">+45일</b>
+                        </figcaption>
+
+                    </figure>
+                    <div style="padding:0 10px">
+                        <h3>{{supply.name}}
+                        </h3>
+                        입수일 : {{supply.get|date:'Y/m/d'}} <br>
+                        분양비용 : {{supply.price |intcomma }} 원
+                    </div>
+                </div>
+                {% endfor %}
+            </article>
+
+            <div class="modal-back"></div>
+            <div class="modal-body">
+
+            </div>
+            </div>
+            </li>
+        </ul>
+        </section>
+        <script>
+
+            overlay = document.getElementsByClassName("modal-back")[0];
+            modal = document.getElementsByClassName("modal-body")[0];
+            body = document.getElementsByTagName("body")[0];
+            add_fish = document.getElementById("add_fish");
+            const onoverlay = () =>{
+                overlay.style.display="block";
+                modal.style.display="block";
+                body.style.overflow="hidden";
+            }
+            const outoverlay = () =>{
+                overlay.style.display="none";
+                modal.style.display="none";
+                body.style.overflow="scroll";
+            }
+            overlay.addEventListener('click' , outoverlay);
+            add_fish.addEventListener('click',()=>{
+
+                onoverlay();
+
+                modal.innerHTML=`
+                
+                <div id="fish_modal" style="margin:10px;">
+                <div class="input">
+                    <input class="inputs" id="fishName" type="text" placeholder="이름"/>
+                    <label class="labels" for="fishName">이름</label>
+                </div>
+                <div class="input">
+                    <input class="inputs" id="hmf" type="number" placeholder="마릿수"/>
+                    <label class="labels" for="hmf">마릿수</label>
+                </div>
+                <div class="input">
+                    <label>암수</label>
+                   <select>
+                       <option value="N" selected>선택안함</option>
+                       <option value="F">암</option>
+                       <option value="M">수</option>
+                   </select>
+                </div>
+                <div class="input">
+                    <input class="inputs" id="fishPrice" type="number" placeholder="분양비"/>
+                    <label class="labels" for="fishPrice">분양가격</label>
+                </div>
+                <div class="input">
+                    <input type="file" id="fishImg" accept=".png, .jpg, .jpeg">
+                </div>
+                
+                <div class="input">
+                    <input class="inputs" type="text" id="fishGet" name="foo" placeholder="시작일" readonly>
+                    <label class="labels" for="fishGet">시작일</label>
+                </div>
+                
+            </div>
+            <button id="click" onclick="send()">클릭</button>
+                `;
+                datepicker();
+            });
+add_fish.addEventListener('click',()=>{
+
+                onoverlay();
+
+                modal.innerHTML=`
+                
+                <div id="fish_modal" style="margin:10px;">
+                <div class="input">
+                    <input class="inputs" id="fishName" type="text" placeholder="이름"/>
+                    <label class="labels" for="fishName">이름</label>
+                </div>
+                <div class="input">
+                    <input class="inputs" id="hmf" type="number" placeholder="마릿수"/>
+                    <label class="labels" for="hmf">마릿수</label>
+                </div>
+                <div class="input">
+                    <label>암수</label>
+                   <select>
+                       <option value="N" selected>선택안함</option>
+                       <option value="F">암</option>
+                       <option value="M">수</option>
+                   </select>
+                </div>
+                <div class="input">
+                    <input class="inputs" id="fishPrice" type="number" placeholder="분양비"/>
+                    <label class="labels" for="fishPrice">분양가격</label>
+                </div>
+                <div class="input">
+                    <input type="file" id="fishImg" accept=".png, .jpg, .jpeg">
+                </div>
+                
+                <div class="input">
+                    <input class="inputs" type="text" id="fishGet" name="foo" placeholder="시작일" readonly>
+                    <label class="labels" for="fishGet">시작일</label>
+                </div>
+                
+            </div>
+            <button id="click" onclick="send()">클릭</button>
+                `;
+                datepicker();
+            });
+        add_plant.addEventListener('click',()=>{
+
+            onoverlay();
+
+            modal.innerHTML=`
+
+            <div style="margin:10px;">
+            <div class="input">
+                <input class="inputs" id="plantName" type="text" placeholder="이름"/>
+                <label class="labels" for="plantName">이름</label>
+            </div>
+
+            <div class="input">
+                <input class="inputs" id="plantPrice" type="number" placeholder="분양비"/>
+                <label class="labels" for="plantPrice">분양가격</label>
+            </div>
+            <div class="input">
+                <input type="file" id="plantImg" accept=".png, .jpg, .jpeg">
+            </div>
+
+            <div class="input">
+                <input class="inputs" type="text" id="plantGet" name="foo" placeholder="시작일" readonly>
+                <label class="labels" for="plantGet">시작일</label>
+            </div>
+
+            </div>
+            <button id="click" onclick="send('plant')">클릭</button>
+            `;
+            datepicker();
+        });
+        add_supplies.addEventListener('click',()=>{
+
+            onoverlay();
+
+            modal.innerHTML=`
+
+            <div style="margin:10px;">
+            <div class="input">
+                <input class="inputs" id="suppliesName" type="text" placeholder="이름"/>
+                <label class="labels" for="suppliesName">이름</label>
+            </div>
+
+            <div class="input">
+                <input class="inputs" id="suppliesPrice" type="number" placeholder="분양비"/>
+                <label class="labels" for="suppliesPrice">분양가격</label>
+            </div>
+            <div class="input">
+                <input type="file" id="suppliesImg" accept=".png, .jpg, .jpeg">
+            </div>
+
+            <div class="input">
+                <input class="inputs" type="text" id="suppliesGet" name="foo" placeholder="시작일" readonly>
+                <label class="labels" for="suppliesGet">시작일</label>
+            </div>
+
+            </div>
+            <button id="click" onclick="send('supplies')">클릭</button>
+            `;
+            datepicker();
+            });
+
+
+        function send(type){
+            if (type=='fish'){
+                    const name=document.getElementById("fishName");
+                    const hmf = document.getElementById("hmf");
+                    const price = document.getElementById("fishPrice");
+                    var img = document.getElementById("fishImg");
+
+                    var sex = document.getElementsByTagName("select")[0];
+                    elementList=[name,hmf,price,img,sex];
+                    sexVal = sex.options[sex.selectedIndex].value; 
+                    imgs = img.files[0];
+                    const get = document.getElementById("fishGet");
+                    var formData = new FormData();
+                    formData.append('name', name.value)
+                    formData.append('img',imgs);
+                    formData.append('price',price.value);
+                    formData.append('hmf',hmf.value);
+                    formData.append('get',get.value)
+                    formData.append('sex', sexVal)
+                    fetch('/add_fish/{{pid}}',{
+                        method:'POST',
+                        body:formData,
+                        headers:{
+                                'X-CSRFToken': '{{csrf_token}}'
+                        }
+                        })
+                .then(res=>res.json())
+                .then((result)=> {
+                    elementList.forEach((e)=>{
+                        e.value='';
+                    })
+                    outoverlay();
+                });
+            }
+            if(type=='plant'){
+                const name=document.getElementById("plantName");
+                const price = document.getElementById("plantPrice");
+                var img = document.getElementById("plantImg");
+                const get = document.getElementById("plantGet");
+
+                elementList=[name,price,img,get];
+                imgs = img.files[0];
+                var formData = new FormData();
+                formData.append('name', name.value)
+                formData.append('img',imgs);
+                formData.append('price',price.value);
+                formData.append('get',get.value)
+                fetch('/add_plant/{{pid}}',{
+                    method:'POST',
+                    body:formData,
+                    headers:{
+                            'X-CSRFToken': '{{csrf_token}}'
+                    }
+                    })
+                .then(res=>res.json())
+                .then((result)=> {
+                    elementList.forEach((e)=>{
+                        e.value='';
+                    })
+                    outoverlay();
+                });
+            }
+            if(type=='supplies'){
+                const name=document.getElementById("suppliesName");
+                const price = document.getElementById("suppliesPrice");
+                var img = document.getElementById("suppliesImg");
+                const get = document.getElementById("suppliesGet");
+
+                elementList=[name,price,img,get];
+                imgs = img.files[0];
+                var formData = new FormData();
+                formData.append('name', name.value)
+                formData.append('img',imgs);
+                formData.append('price',price.value);
+                formData.append('get',get.value)
+                fetch('/add_supplies/{{pid}}',{
+                    method:'POST',
+                    body:formData,
+                    headers:{
+                            'X-CSRFToken': '{{csrf_token}}'
+                    }
+                    })
+                .then(res=>res.json())
+                .then((result)=> {
+                    elementList.forEach((e)=>{
+                        e.value='';
+                    })
+                    outoverlay();
+                });
+            }
+        }
+        const datepicker = () =>{
+            const elem = document.querySelector('input[name="foo"]');
+                const datepicker = new Datepicker(elem, {
+                'language':'ko',
+                'format' : 'yyyy-mm-dd',
+                'autohide' : 'true',
+                }); 
+        }
+        </script>
+    </body>
+</html>

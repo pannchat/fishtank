@@ -1,0 +1,520 @@
+
+{%load static%}
+{% load Dday %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" 
+          content="width=device-width, height=device-height, 
+                     minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0">
+                     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/css/datepicker-foundation.min.css">
+                     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/js/datepicker-full.min.js"></script>
+                     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/js/locales/ko.js"></script>
+                    </head>
+    <body>
+        <style>
+
+@font-face {
+    font-family: 'Y_Spotlight';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts-20-12@1.0/Y_Spotlight.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'BRBA_B';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_seven@1.2/BRBA_B.woff') format('woff');
+    font-weight: thin;
+    font-style: normal;
+
+}
+                div{
+                    z-index:4;
+                }
+                #head-cover{
+
+                    position: absolute;
+                    z-index: 1;
+                    width:95%;
+                    background-color: #8aa1a1;
+                    border-radius: 20px 20px 20px 0;
+                    left:50%;
+                    top:10px;
+                    transform: translate(-50%);
+                    -webkit-transform: translate(-50%);
+                    height:220px;
+
+                    background-repeat: no-repeat;
+                    background-size: 100%;
+                    background-position-x:right;
+                    
+
+                }
+                #head-cover:before{
+                    content:'';
+                    background-color:#8aa1a1;
+                    position: absolute;
+                    top:215px;
+                    left:0px;
+                    width:30%;
+                    height:100px;
+                    border-radius: 0 0 30px 20px;
+                    
+                }
+                .head-cover2{
+                    width: 80px;
+                    height: 80px;
+                    overflow: hidden;
+                    position: absolute;
+                    top:219px;
+                    left:30%;
+                    transform:translateX(-1px);
+                    
+                }
+                .head-cover2:before{
+                    top:0;
+                    left: 0;
+                    box-shadow: -90px -90px 0 0 #8aa1a1;
+                    content: "";
+                    display: block;
+                    width: 200%;
+                    height: 200%;
+                    position: absolute;
+                    border-radius: 50%;
+                }
+                .head-cover2:after{
+                    z-index: 2;
+                    content: "";
+                    display: block;
+                    width: 200%;
+                    height: 200%;
+                    position: absolute;
+                    border-radius: 50%;
+                }
+            html,body{margin:0px;
+            }
+            h3,h4{
+                margin:5px;
+            }
+            #add-feed{
+                border-radius: 50%; width:70px;height:70px;position:fixed;bottom:10px;right:10px;background-color:#8aa1a1;
+                -webkit-transition: 0.2s ease-in-out;
+                transition: 0.2s ease-in-out;
+                cursor: pointer;
+            }
+            .modal-back{
+                display:none;
+                width:100%;
+                height:100%;
+                background-color: rgba(0,0,0,0.5);
+                position:fixed;
+                top:0;
+                left:0;
+                overflow-y: hidden;
+
+            }
+            .modal-body{
+                border-radius:7px;
+                width:90%;
+                height:470px;
+                background-color:white;
+                overflow-y:auto;
+                overflow: hidden;
+                position:fixed;
+                top:50%;
+                left:50%;
+                transform:translate(-50%,-50%);
+                display:none;
+            }
+
+
+            .input{
+                margin:10px 0;
+                position:relative;
+                width:100%;
+            }
+            .inputs{
+                background: transparent;
+                border:none;
+                border-bottom: solid 1px #ccc;
+                padding: 20px 2px 5px;
+                transition: padding 0.4s;
+                font-size: 14pt;
+                width:100%;
+            }
+            .inputs:placeholder-shown+.labels{
+                color:#aaa;
+                font-size: 14pt;
+                top:15px;
+            }
+            .inputs:focus + .labels, .labels{
+                color:#eab69a;
+                font-size:10pt;
+                pointer-events:none;
+                position:absolute;
+                left:2px;
+                top:2px;
+                transition:top 0.2s,left 0.2s, font-size 0.2s;
+            }
+            .inputs::placeholder{
+                color:transparent;
+                display:none;
+            }
+            .inputs:focus,.inputs:not(:placeholder-shown){
+                border-bottom:solid 1px #eab69a;
+                outline:none;
+            }
+            #checkbox{
+                display:none;
+            }
+            #click{
+                border:none;
+                background-color: #eab69a;
+                width:100%;
+                height:40px;
+                position:absolute;
+                bottom:0;
+            }
+            .icon{
+                display:flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width:30px;
+                font-size:10pt;
+            }
+            #day-of-the-week > input[type=checkbox]{
+                display:none;
+            }
+            .dotw{
+                width:30px;
+                height:30px;
+                border-radius: 50%;
+                background-color: rgb(201, 201, 201);
+                display:flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .img-thumb{
+                border-radius: 5px 30px 0px 30px;
+                width:100%;height:130px;
+                object-fit:cover;
+                background-color: white;
+            }
+            .figure{
+                width:100%;
+                height:70px;
+                background-color:  white;
+                border-radius: 0 0 5px 30px;
+                margin-top:-20px;
+                padding-top:20px;
+                display:flex;
+                color: #3c3c3c;
+                cursor: pointer;
+            }
+            div > .input {
+                margin-top:0px;
+            }
+        </style>
+        <div class="head-cover2"></div>
+        <div id = "head-cover" >
+            <div style="position:absolute;right:0;width:200px;height:200px;overflow:hidden" >
+            <img style="position:absolute;right:-150px;transform:scaleX(-1);width:300px;" src="{% static 'tankManage/img/betta.png'%}"/>
+            </div>
+            <!-- <div style="margin-top:-10px;width:30%;background-color: #8aa1a1;border-radius: 0 0 20px 0;height:100px;"></div> -->
+        </div>
+        <div style="width:100%;height: 100%;background-color:#e9e8e4;position:fixed; z-index:0"></div>
+
+        <div style="display:flex;padding:0 5%;flex-direction: column;">
+        <div style="font-size:20pt;font-weight: bold;margin-top:35px; color:white">어항관리</div>
+        
+        {% if user.is_authenticated %}
+        <div style="display:flex;margin:10px 0px;color:white;"> 
+            <img style="border-radius:100%;width:80px;height:80px;object-fit: cover;object-position:0;border:1px solid rgb(196, 196, 196);" src="{% static 'tankManage/img/pimafix.jpg' %}">
+            <div style="display:flex;flex-direction: column;padding-left:20px;">
+                <h3>{{ user.username }}</h3>
+                <h4>{{ user.email }}</h4>
+            </div>
+        </div>
+        <div style="width:100%;height:30px;border:3px solid white; color:white;border-radius: 5px;display: flex;justify-content: center;align-items: center;cursor: pointer;">
+            프로필 수정
+        </div>
+        </div>
+
+        {% endif %}
+        <div style="display:flex;padding:0 2% 0 12%;flex-direction: column;">
+
+        <div id="tank-list" style="margin-top:0px;position: relative;">
+        {%for i in feed_list%}
+
+        
+            <figure style="margin:15px 0px;">
+
+                {% if i.thumbnail != '' %} <!-- 썸네일 -->
+                    <img class="img-thumb" style="object-position:0 70%;" src="/media/{{i.thumbnail}}">
+                {% else %}
+                    <img class="img-thumb" style="object-position:0 90%;" src="{% static 'tankManage/img/default.jpeg' %}">
+                {% endif %}
+                
+                <div class="figure" onclick="location.href='/fishtank/{{i.id}}'">
+                    <div style="margin:10px;width:100%">
+                        <figcaption style="font-family: Y_Spotlight;font-size:13pt;">{{i.title}}</figcaption>
+                        <article>{{i.contents}}/{{i.start|date:'Y-m-d'}}</article>
+                        </figcaption>
+                    </div>
+                    <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/dispenser.svg' %}"/></div>
+                    <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/bucket.svg' %}"/></div>
+                    
+                    {%if i.public != True %} 
+                        <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:28px;" src="{% static 'tankManage/img/lock2.svg' %}"/></div>
+                    {% endif %}
+                    </div>
+
+                <!-- <div style="width:200px;position:relative;">
+                    <div style="position:absolute;top:65%;width:100%;transform:translateY(-50%);color: #3c3c3c;">
+
+                    </div>
+                </div> -->
+
+            </figure>
+
+        {%endfor%}
+        </div>
+        <div id="add-feed">
+        <img style="width:60px;position:absolute;left:50%;top:50%;transform: translate(-50%,-50%);"src="{% static 'tankManage/img/plus.svg'%}"/>
+        </div>
+        <div id="modal-back" class="modal-back"></div>
+        <div class="modal-body">
+            <div style="margin:10px;">
+                <div class="input">
+                    <input class="inputs" id="title" type="text" placeholder="이름"/>
+                    <label class="labels" for="title">이름</label>
+                </div>
+                <div class="input">
+                    <input class="inputs" id="content" type="text" placeholder="이름"/>
+                    <label class="labels" for="content">설명</label>
+                </div>
+                <b>어항 크기</b>
+                <div style="display:flex;">
+                    <div class="input">
+                        <input class="inputs" id="width" type="text" placeholder="가로"/>
+                        <label class="labels" for="width">가로</label>
+                    </div>
+                    <div style="width:30px;margin:auto;" >
+                        X
+                    </div>
+                    <div class="input">
+                        <input class="inputs" id="depth" type="text" placeholder="세로"/>
+                        <label class="labels" for="depth">세로</label>
+                    </div>
+                    <div style="width:30px;margin:auto;" >
+                        X
+                    </div>
+                    <div class="input">
+                        <input class="inputs" id="height" type="text" placeholder="높이"/>
+                        <label class="labels" for="height">높이</label>
+                    </div>
+                </div>
+                <input type="checkbox" id="checkbox"/>
+                
+
+
+                <div class="input">
+                
+                    
+                    <input type="file" id="thumbnail" accept=".png, .jpg, .jpeg">
+                
+                </div>
+                
+                <div style="display:flex; align-items: center;">
+                    <div class="icon">
+                        <img style="width:30px;"src="{% static 'tankManage/img/bucket.svg' %}"/>
+                        환수
+                    </div>
+
+                        <div id="day-of-the-week"style="display:flex;justify-content:space-between;width:100%;margin:0 10px;">
+                            <input name="checkbox" type="checkbox" id="dotw-0"/><label for="dotw-0"><div class="dotw">일</div></label>
+                            <input type="checkbox" id="dotw-1"/><label for="dotw-1"><div class="dotw">월</div></label>
+                            <input type="checkbox" id="dotw-2"/><label for="dotw-2"><div class="dotw">화</div></label>
+                            <input type="checkbox" id="dotw-3"/><label for="dotw-3"><div class="dotw">수</div></label>
+                            <input type="checkbox" id="dotw-4"/><label for="dotw-4"><div class="dotw">목</div></label>
+                            <input type="checkbox" id="dotw-5"/><label for="dotw-5"><div class="dotw">금</div></label>
+                            <input type="checkbox" id="dotw-6"/><label for="dotw-6"><div class="dotw">토</div></label>
+                        </div>
+
+                </div>
+                <div class="input">
+                    <input class="inputs" type="text" id="timepicker" name="foo" placeholder="시작일" readonly>
+                    <label class="labels" for="timepicker">시작일</label>
+                </div>
+                
+
+                <div style="width:100%;height:50px;display:flex;font-size:9pt;justify-content: flex-end;">
+                    <label for="checkbox">
+                    <div class="icon" style="width:50px;">
+                        <img id="cb-img"style="width:40px;" src="{% static 'tankManage/img/unlock.svg'%}">
+                        공개여부
+                    </div>
+                </label>
+                </div>
+            </div>
+            <button id="click" onclick="send()">클릭</button>
+        </div>
+        <script>
+        const elem = document.querySelector('input[name="foo"]');
+        const datepicker = new Datepicker(elem, {
+            'language':'ko',
+            'format' : 'yyyy-mm-dd',
+            'autohide' : 'true',
+        }); 
+        const dotw = document.getElementsByClassName('dotw');
+        const dotwDiv = document.getElementById("day-of-the-week");
+        dotwDiv.addEventListener('change',()=>{
+            
+            for(i=0; i<dotw.length; i++){
+
+                if(document.getElementById("dotw-"+i).checked){
+                    dotw[i].style.backgroundColor = "#eab69a"
+                }else{
+                    dotw[i].style.backgroundColor = "rgb(201, 201, 201)";
+                }
+            }
+        })
+
+
+
+       var checkbox = document.getElementById("checkbox");
+       var cbImg = document.getElementById("cb-img");
+       checkbox.addEventListener("change",()=>{
+           if(checkbox.checked){
+            cbImg.src = "{%static 'tankManage/img/lock.svg'%}";
+           }else{
+            cbImg.src = "{%static 'tankManage/img/unlock.svg'%}";
+           }
+       })
+       const outoverlay = () => {
+            overlay.style.display="none";
+            modal.style.display="none";
+            body.style.overflow = "scroll";
+        } 
+        const onoverlay = () =>{
+            overlay.style.display="block";
+            modal.style.display="block";
+            body.style.overflow = "hidden";
+        }
+
+        function send(){
+            var title = document.getElementById('title');
+            var contents = document.getElementById('content');
+            var checkbox = document.getElementById('checkbox');
+            var thumbnail = document.getElementById('thumbnail');
+            var start = document.getElementById('timepicker');
+            var width = document.getElementById('width');
+            var depth = document.getElementById('depth');
+            var height = document.getElementById('height');
+            var changeWater = '';
+            
+            for(i=0; i<dotw.length; i++){
+                if(document.getElementById("dotw-"+i).checked){
+                    changeWater += '1';
+                }else{
+                    changeWater += '0';
+                }
+            }
+            const elList = [title,contents,thumbnail,changeWater,start,width,depth,height];
+            var formData = new FormData();
+            file = thumbnail.files[0];
+            formData.append('thumbnail',file);
+            formData.append('title',title.value);
+            formData.append('contents',contents.value);
+            formData.append('public',!checkbox.checked);
+            formData.append('changewater',changeWater);
+            formData.append('start',start.value);
+            formData.append('width',width.value);
+            formData.append('depth',depth.value);
+            formData.append('height',height.value);
+            // alert(thumbnail);
+            // alert(checkbox.checked);
+            fetch('/create_fishtank', {
+                method: 'POST',
+                body: formData,
+                headers:{
+                    'X-CSRFToken': '{{csrf_token}}'
+                }
+            })
+            .then(res => res.json())
+            .then((result) =>{
+                alert("전송");
+                var lock= `<div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/lock.svg' %}"/>`;
+                var tankList = document.getElementById("tank-list");
+                
+                    tankList.innerHTML+=`
+                    <div style="margin:15px 0px;">\
+                        <div style="border-radius: 5px 30px 0 0;background-color:  white">\
+                        <img style="border-radius: 5px 30px 5px 30px;width:100%;height:130px;object-fit:cover;" src="${result.thumbnail ? result.thumbnail : 'default.jpeg'}">\
+                    </div>\
+                    <div style="width:100%;height:70px;background-color:  white;border-radius: 0 0 5px 30px;margin-top:-20px;padding-top:20px;display:flex;color: #3c3c3c;">\
+                    <div style="margin:10px;width:100%">\
+                        <div style="font-family: Y_Spotlight;font-size:13pt;">${result.title}</div>\
+                        <div style="">${result.content}/\
+                            ${result.Fid}\
+                        </div>\
+                    </div>\
+                    <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/bucket.svg' %}"/></div>\
+                    <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/dispenser.svg' %}"/></div>\
+                    ${result.public ?  '' : lock}\
+                </div>\
+                </div>\
+                 `;
+                outoverlay();
+                // title.value ='';
+                // contents.value = '';
+                // thumbnail.value='';
+                // changeWater='';
+                // start.value='';
+               elList.forEach((e)=>{
+                   e.value='';
+               })
+                checkbox.checked = false;
+
+                const cbReset = document.querySelectorAll('input[type="checkbox"]')
+                cbReset.forEach((box)=>{
+                    box.value = false;
+
+                })
+            })
+        }
+        plusBtn = document.getElementById("add-feed");
+        overlay = document.getElementById("modal-back");
+        modal = document.getElementsByClassName("modal-body")[0];
+        body = document.getElementsByTagName("body")[0];
+
+        plusBtn.addEventListener('click',onoverlay);
+        overlay.addEventListener("click",outoverlay);
+        </script>
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script>
+        $('#click').click(function(){
+            var title = $('#title').val() ;
+            var content = $('#content').val();
+            alert(title)
+            $.ajax({ 
+                type:"POST",
+            url:'create_fishtank',
+            dataType:'json',
+
+            data : {
+                'title' : title,
+                'contents' : content,
+                'csrfmiddlewaretoken': '{{csrf_token}}',
+            },
+                success:function(data){
+                    console.log(data);
+                },
+                error: function(request,status,error){
+                    alert(error)
+                } }) }) 
+        </script>
+        -->
+    </div>
+    </body>
+</html>

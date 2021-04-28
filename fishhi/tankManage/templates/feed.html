@@ -13,14 +13,14 @@
             <input type="text" name="input" class="input" id="search-input">
             <button type="reset" class="search" id="search-btn"></button>
         </form>
-        <div class="flex-box">
+        <div class="flex-box" id="test">
         <div class="header">
         Category
         </div>
-        <div style="color:#8c98a4;width:90%;margin:10px;">gae sibal jonna himdulda</div>
+        <div style="color:#8c98a4;width:90%;margin:10px;">ha... himdulda</div>
         
         <div style="display:flex; justify-content: space-between;width:100%;color:#7c838a;margin:10px;">
-            <div class="flex-box">
+            <div class="flex-box" onclick="go(1)">
                 <div style="border-radius: 10px;width:60px;height: 60px;background-color: #bac5d0; margin:10px 0px">
                     <img src="{% static '/tankManage/img/aquarium.png' %}" style="width:30px;position: relative;left:50%;top:50%;transform: translate(-50%,-50%);">
                 </div>
@@ -32,18 +32,24 @@
                 </div>
                 <span>#수초찾기</span>
             </div>
-            <div class="flex-box">
+            
+            <div class="flex-box" onclick="go(3)" >
                 <div style="border-radius: 10px;width:60px;height: 60px;background-color: #bfd3f2; margin:10px 0px">
                     <img src="{% static '/tankManage/img/aquarium.png' %}" style="width:30px;position: relative;left:50%;top:50%;transform: translate(-50%,-50%);">
                 </div>
-                <span>#레이아웃</span>
+                <span>#어항관리</span>
             </div>
-            <div class="flex-box">
+    
+            <div class="flex-box" onclick="go(4)">
                 <div style="border-radius: 10px;width:60px;height: 60px;background-color: #bac5d0; margin:10px 0px">
                     <img src="{% static '/tankManage/img/aquarium.png' %}" style="width:30px;position: relative;left:50%;top:50%;transform: translate(-50%,-50%);">
                 </div>
                 <span>#최저가</span>
             </div>
+        </div>
+        <div style="border-radius:10px;width:100%;height:100px;background-color:#8aa1a1;margin:30px;">
+            <div style="font-size:15pt;margin:10px;font-weight: bold;color:#dee6e6">구피를 찾습니다..</div>
+            <img style="margin-top:-40px; object-fit: cover;object-position: center;width:100%;height:120px;" src="{% static 'tankManage/img/guppy.png'%}" />
         </div>
         <div style="display:flex; justify-content: center;width:90%">
             
@@ -63,13 +69,26 @@
         <script>
             const input = document.getElementById("search-input");
             const searchBtn = document.getElementById("search-btn");
-
+            const test = document.getElementById("test");
             const expand = () =>{
                 searchBtn.classList.toggle("close");
                 input.classList.toggle("square");
+                test.classList.toggle("no");
             };
             searchBtn.addEventListener("click",expand)
             // document.getElementById("test").innerHTML = `{{obj}}`;
+            function go(num){
+                switch(num){
+                    case 1 :
+                        location.href="{%url 'calc' %}";
+                        break;
+                    case 3: 
+                        location.href="{%url 'my_profile'%}";
+                        break;
+                    case 4:
+                        location.href="{%url 'search'%}";
+                }
+            }
         </script>
     </body>
 </html>

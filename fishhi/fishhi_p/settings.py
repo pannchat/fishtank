@@ -25,12 +25,14 @@ SECRET_KEY = os.environ["INSTA_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.humanize',
+    'account',
     'django_crontab',
     'tankManage',
     'django.contrib.admin',
@@ -127,6 +129,10 @@ STATICFILES_DIRS = [
 ]   
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')  #static 파일들이 어디로 모일 것인지를 쓰는 곳.
+
+#MEDIA
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # CRONTAB
 CRONJOBS = [
