@@ -27,7 +27,7 @@ class Fish(models.Model):
         ('N','설정안함'),
     )
     id = models.BigAutoField(help_text="fishes ID", primary_key=True)
-    feed_fish_id = models.ForeignKey("Feed", related_name="feed_fish", on_delete=models.PROTECT, db_column="feed_fish_id")
+    feed_fish_id = models.ForeignKey("Feed", related_name="feed_fish", on_delete=models.CASCADE, db_column="feed_fish_id")
     name = models.CharField(help_text="fishes Name", blank=False, null=False,max_length=40)
     img = models.ImageField(upload_to="images/%Y/%m/%d" , null=True, blank=True)
     sex = models.CharField(
@@ -47,7 +47,7 @@ class Fish(models.Model):
 class Plant(models.Model):
     username = models.ForeignKey(User , on_delete=models.CASCADE, default="admin", null=True,blank=True)
     id = models.BigAutoField(help_text="plants ID", primary_key=True)
-    feed_plant_id = models.ForeignKey("Feed", related_name="feed_plant", on_delete=models.PROTECT, db_column="feed_plant_id")
+    feed_plant_id = models.ForeignKey("Feed", related_name="feed_plant", on_delete=models.CASCADE, db_column="feed_plant_id")
     name = models.CharField(help_text="plants Name", blank=False, null=False,max_length=40)
     get = models.DateField(blank=True, null=True,help_text="입수날짜")
     price =  models.IntegerField(default=0,null=True,blank=True,help_text="가격")
@@ -59,7 +59,7 @@ class Supplies(models.Model):
     username = models.ForeignKey(User , on_delete=models.CASCADE, default="admin", null=True,blank=True)
     id = models.BigAutoField(help_text="supplies ID", primary_key=True)
     img = models.ImageField(upload_to="images/%Y/%m/%d" , null=True, blank=True)
-    feed_supplies_id = models.ForeignKey("Feed", related_name="feed_supplies", on_delete=models.PROTECT, db_column="feed_supplies_id")
+    feed_supplies_id = models.ForeignKey("Feed", related_name="feed_supplies", on_delete=models.CASCADE, db_column="feed_supplies_id")
     name = models.CharField(help_text="supplies Name", blank=False, null=False,max_length=40)
     get = models.DateField(blank=True, null=True,help_text="구매날짜")
     price =  models.IntegerField(default=0,null=True,blank=True,help_text="가격")

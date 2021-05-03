@@ -207,7 +207,7 @@ background-position-x:right;
         <div id = "head-cover" >
             <h1>{{fishtank.title}}</h1>
             <h3>{{fishtank.contents}}</h3>
-            <img style="position:relative; z-index:2;padding:0 0 0 10px;top:10px;box-sizing: border-box;border-radius: 20px;position:relateive;" width="100%"src="/media/{{fishtank.thumbnail}}">
+            <img style="position:relative;padding:0 0 0 10px;top:10px;box-sizing: border-box;border-radius: 20px;position:relateive;" width="100%"src="/media/{{fishtank.thumbnail}}">
 
        
         </div>
@@ -427,51 +427,11 @@ background-position-x:right;
                 </div>
                 
             </div>
-            <button id="click" onclick="send()">클릭</button>
+            <button id="click" onclick="send('fish')">클릭</button>
                 `;
                 datepicker();
             });
-add_fish.addEventListener('click',()=>{
 
-                onoverlay();
-
-                modal.innerHTML=`
-                
-                <div id="fish_modal" style="margin:10px;">
-                <div class="input">
-                    <input class="inputs" id="fishName" type="text" placeholder="이름"/>
-                    <label class="labels" for="fishName">이름</label>
-                </div>
-                <div class="input">
-                    <input class="inputs" id="hmf" type="number" placeholder="마릿수"/>
-                    <label class="labels" for="hmf">마릿수</label>
-                </div>
-                <div class="input">
-                    <label>암수</label>
-                   <select>
-                       <option value="N" selected>선택안함</option>
-                       <option value="F">암</option>
-                       <option value="M">수</option>
-                   </select>
-                </div>
-                <div class="input">
-                    <input class="inputs" id="fishPrice" type="number" placeholder="분양비"/>
-                    <label class="labels" for="fishPrice">분양가격</label>
-                </div>
-                <div class="input">
-                    <input type="file" id="fishImg" accept=".png, .jpg, .jpeg">
-                </div>
-                
-                <div class="input">
-                    <input class="inputs" type="text" id="fishGet" name="foo" placeholder="시작일" readonly>
-                    <label class="labels" for="fishGet">시작일</label>
-                </div>
-                
-            </div>
-            <button id="click" onclick="send()">클릭</button>
-                `;
-                datepicker();
-            });
         add_plant.addEventListener('click',()=>{
 
             onoverlay();
