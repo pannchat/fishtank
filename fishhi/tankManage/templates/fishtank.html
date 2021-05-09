@@ -41,7 +41,8 @@
         #head-cover > h1,h3{
             color: #3c3c3c;
             margin:0;
-            padding:5px 10px;
+
+
         }
 
         .fish-section{
@@ -107,9 +108,9 @@ h3 > b{
                 overflow-y:auto;
                 overflow: hidden;
                 position:fixed;
-                top:50%;
+                top:100px;
                 left:50%;
-                transform:translate(-50%,-50%);
+                transform:translateX(-50%);
                 display:none;
             }
             .input{
@@ -195,16 +196,68 @@ margin-bottom:20px;
 background-repeat: no-repeat;
 background-size: 100%;
 background-position-x:right;
-
-
+box-sizing: border-box;
+padding : 0 5px;
 
 }
+#nav-bar{
+                position:relative;
+                z-index: 11;
+                margin:10px 0;
+                width:100%;
+                display:flex;
+                justify-content: space-between;
+            }
+            nav img{
+                cursor:pointer;
+            }
+            #go-back{
+                width:23px;
+                height:23px;
+            }
+            #show-menu{
+                width:27px;
+                height:27px;
+                transition: all .3s ease-in-out;
+            }
+
+            .menu-wrap{
+                position:fixed;
+                top:0px;
+                width:300px;
+                right:-300px;
+                z-index:10;
+                height:100%;
+                padding:50px 20px;
+                box-sizing: border-box;
+                transition: right .3s ease-in-out;
+                background-color: #aaa;
+            }
+            .menu-wrap.on{
+                right:0;
+            }
+            .btn-rotate { transform: rotate(-90deg); transition: all 0.3s ease-in-out; }
 
 
     </style>
     <body>
 
         <div id = "head-cover" >
+            <header>
+                <div id="nav-bar">
+                    <img id="go-back" src="{% static 'tankManage/img/back.svg'%}">
+                    <img id="show-menu" src="{% static 'tankManage/img/menu.svg'%}">
+                </div>
+                <div class="menu-wrap">
+                    <nav id="menu">
+                        <ul class="menu-list">
+                            <li class="list-style">
+                                <a href="#">home</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </header>
             <h1>{{fishtank.title}}</h1>
             <h3>{{fishtank.contents}}</h3>
             <img style="position:relative;padding:0 0 0 10px;top:10px;box-sizing: border-box;border-radius: 20px;position:relateive;" width="100%"src="/media/{{fishtank.thumbnail}}">
@@ -359,6 +412,7 @@ background-position-x:right;
                     </div>
                 </div>
                 {% endfor %}
+
             </article>
 
          
@@ -367,7 +421,26 @@ background-position-x:right;
             </div>
             </li>
             <li>
-                <a href="http://192.168.0.103:8000/calc?width=30&height=30&depth=30">{{fishtank.width}} * {{fishtank.depth}} * {{fishtank.height}} </a>
+                <article>
+                    <header>
+                        <h2>size</h2>
+                    </header>
+    
+
+                    
+                    <div class="fish-section">
+                        <img style="width:40px" src="{% static '/tankManage/img/fishtank.png' %}"/>
+                        <div style="padding:0 10px;line-height:40px;vertical-align: middle;">
+                            
+                            <a href="http://192.168.0.103:8000/calc?width={{fishtank.width}}&height={{fishtank.height}}&depth={{fishtank.depth}}">
+                                {{fishtank.width}}cm * {{fishtank.depth}}cm * {{fishtank.height}}cm
+                            </a>
+                        </div>
+                    </div>
+
+                    
+                </article>
+                
             </li>
         </ul>
         <div class="modal-back"></div>
@@ -388,6 +461,8 @@ background-position-x:right;
                 overlay.style.display="none";
                 modal.style.display="none";
                 body.style.overflow="scroll";
+                menuWrap.classList.remove("on");
+                showMenu.classList.remove('btn-rotate');
             }
             overlay.addEventListener('click' , outoverlay);
             add_fish.addEventListener('click',()=>{
@@ -593,6 +668,33 @@ background-position-x:right;
                 'autohide' : 'true',
                 }); 
         }
+        document.getElementById('go-back').addEventListener('click',()=>{
+    window.history.back();
+})
+var menuWrap = document.querySelector('.menu-wrap');
+var showMenu = document.getElementById('show-menu');
+document.addEventListener('DOMContentLoaded', ()=>{
+
+    showMenu.addEventListener('click',()=>{
+        if (menuWrap.classList.contains('on')){
+            
+            
+            menuWrap.classList.remove("on");
+            showMenu.classList.remove('btn-rotate');
+            showMenu.src = "{% static '/tankManage/img/menu.svg' %}";
+            overlay.style.display="none";
+            body.style.overflow = "scroll";
+        }else{
+            
+            menuWrap.classList.add("on");
+            showMenu.classList.add('btn-rotate');
+            showMenu.src = "{% static '/tankManage/img/exit-white.svg' %}";
+            overlay.style.display="block";
+            body.style.overflow = "hidden";
+        }
+        
+    })
+})
         </script>
     </body>
 </html>

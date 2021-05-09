@@ -11,7 +11,7 @@
                      <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/js/datepicker-full.min.js"></script>
                      <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/js/locales/ko.js"></script>
                     </head>
-    <body>
+    
         <style>
 
 @font-face {
@@ -26,34 +26,28 @@
     font-weight: thin;
     font-style: normal;
 
-}
-                div{
-                    z-index:4;
-                }
+}       
+        header{
+            display:flex;
+            justify-content: space-between;
+        }
                 #head-cover{
+                width:100%;
+                height:245px;
+                background-color: #8aa1a1;
+                border-radius: 20px;
 
-                    position: absolute;
-                    z-index: 1;
-                    width:95%;
-                    background-color: #8aa1a1;
-                    border-radius: 20px 20px 20px 0;
-                    left:50%;
-                    top:10px;
-                    transform: translate(-50%);
-                    -webkit-transform: translate(-50%);
-                    height:220px;
 
-                    background-repeat: no-repeat;
-                    background-size: 100%;
-                    background-position-x:right;
-                    
+                box-sizing: border-box;
+                padding :0 5px;
+                position:relative;
 
                 }
                 #head-cover:before{
                     content:'';
                     background-color:#8aa1a1;
                     position: absolute;
-                    top:215px;
+                    top:225px;
                     left:0px;
                     width:30%;
                     height:100px;
@@ -90,7 +84,8 @@
                     position: absolute;
                     border-radius: 50%;
                 }
-            html,body{margin:0px;
+            body{
+                background-color: #e9e8e4;
             }
             h3,h4{
                 margin:5px;
@@ -109,9 +104,11 @@
                 position:fixed;
                 top:0;
                 left:0;
+
                 overflow-y: hidden;
 
             }
+
             .modal-body{
                 border-radius:7px;
                 width:90%;
@@ -120,9 +117,9 @@
                 overflow-y:auto;
                 overflow: hidden;
                 position:fixed;
-                top:50%;
+                top:100px;
                 left:50%;
-                transform:translate(-50%,-50%);
+                transform:translateX(-50%);
                 display:none;
             }
 
@@ -214,36 +211,89 @@
             div > .input {
                 margin-top:0px;
             }
+            #nav-bar{
+                position:relative;
+                z-index: 11;
+                margin:10px 0;
+                width:100%;
+                display:flex;
+                justify-content: space-between;
+            }
+            nav img{
+                cursor:pointer;
+            }
+            #go-back{
+                width:23px;
+                height:23px;
+            }
+            #show-menu{
+                width:27px;
+                height:27px;
+                transition: all .3s ease-in-out;
+            }
+
+            .menu-wrap{
+                position:fixed;
+                top:0px;
+                width:300px;
+                right:-300px;
+                z-index:10;
+                height:100%;
+                padding:50px 20px;
+                box-sizing: border-box;
+                transition: right .3s ease-in-out;
+                background-color: #aaa;
+            }
+            .menu-wrap.on{
+                right:0;
+            }
+            .btn-rotate { transform: rotate(-90deg); transition: all 0.3s ease-in-out; }
+            #tank-list{
+            margin-top:0px;
+            position: relative;
+            }
         </style>
-        <div class="head-cover2"></div>
-        <div id = "head-cover" >
-            <div style="position:absolute;right:0;width:200px;height:200px;overflow:hidden" >
-            <img style="position:absolute;right:-150px;transform:scaleX(-1);width:300px;" src="{% static 'tankManage/img/betta.png'%}"/>
-            </div>
-            <!-- <div style="margin-top:-10px;width:30%;background-color: #8aa1a1;border-radius: 0 0 20px 0;height:100px;"></div> -->
-        </div>
-        <div style="width:100%;height: 100%;background-color:#e9e8e4;position:fixed; z-index:0"></div>
-
-        <div style="display:flex;padding:0 5%;flex-direction: column;">
-        <div style="font-size:20pt;font-weight: bold;margin-top:35px; color:white">어항관리</div>
+        <body>
+        <div class="head-cover2" ></div>
         
-        {% if user.is_authenticated %}
-        <div style="display:flex;margin:10px 0px;color:white;"> 
-            <img style="border-radius:100%;width:80px;height:80px;object-fit: cover;object-position:0;border:1px solid rgb(196, 196, 196);" src="{% static 'tankManage/img/pimafix.jpg' %}">
-            <div style="display:flex;flex-direction: column;padding-left:20px;">
-                <h3>{{ user.username }}</h3>
-                <h4>{{ user.email }}</h4>
+        <div id = "head-cover">
+            <header>
+                <div id="nav-bar">
+                    <img id="go-back" src="{% static 'tankManage/img/back.svg'%}">
+                    <img id="show-menu" src="{% static 'tankManage/img/menu.svg'%}">
+                </div>
+                <div class="menu-wrap">
+                    <nav id="menu">
+                        <ul class="menu-list">
+                            <li class="list-style">
+                                <a href="#">home</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </header>
+            <div style="font-size:20pt;font-weight: bold; color:white;"><span>어항관리</span></div>
+            {% if user.is_authenticated %}
+            <div style="display:flex;margin:10px 0px;color:white;"> 
+                <img style="border-radius:100%;width:80px;height:80px;object-fit: cover;object-position:0;border:1px solid rgb(196, 196, 196);" src="{% static 'tankManage/img/pimafix.jpg' %}">
+                <div style="display:flex;flex-direction: column;padding-left:20px;">
+                    <h3>{{ user.username }}</h3>
+                    <h4>{{ user.email }}</h4>
+                </div>
             </div>
+            <div style="width:100%;height:30px;border:3px solid white; color:white;border-radius: 5px;display: flex;justify-content: center;align-items: center;cursor: pointer;box-sizing: border-box;">
+                프로필 수정
+            </div>
+            </div>
+            {% endif %}
         </div>
-        <div style="width:100%;height:30px;border:3px solid white; color:white;border-radius: 5px;display: flex;justify-content: center;align-items: center;cursor: pointer;">
-            프로필 수정
-        </div>
-        </div>
+        <!-- <div style="width:100%;height: 100%;background-color:#e9e8e4;position:fixed; z-index:0"></div> -->
 
-        {% endif %}
-        <div style="display:flex;padding:0 2% 0 12%;flex-direction: column;">
+        <div style="display:flex;flex-direction: column;width:100%;margin-top:-20px;">
+       
+        <div style="display:flex;padding:0 0 0 12%;flex-direction: column;">
 
-        <div id="tank-list" style="margin-top:0px;position: relative;">
+        <div id="tank-list">
         {%for i in feed_list%}
 
         
@@ -359,162 +409,172 @@
             </div>
             <button id="click" onclick="send()">클릭</button>
         </div>
+       
+    
         <script>
-        const elem = document.querySelector('input[name="foo"]');
-        const datepicker = new Datepicker(elem, {
-            'language':'ko',
-            'format' : 'yyyy-mm-dd',
-            'autohide' : 'true',
-        }); 
-        const dotw = document.getElementsByClassName('dotw');
-        const dotwDiv = document.getElementById("day-of-the-week");
-        dotwDiv.addEventListener('change',()=>{
-            
-            for(i=0; i<dotw.length; i++){
 
-                if(document.getElementById("dotw-"+i).checked){
-                    dotw[i].style.backgroundColor = "#eab69a"
-                }else{
-                    dotw[i].style.backgroundColor = "rgb(201, 201, 201)";
-                }
-            }
-        })
+const elem = document.querySelector('input[name="foo"]');
+const datepicker = new Datepicker(elem, {
+    'language':'ko',
+    'format' : 'yyyy-mm-dd',
+    'autohide' : 'true',
+}); 
+const dotw = document.getElementsByClassName('dotw');
+const dotwDiv = document.getElementById("day-of-the-week");
+dotwDiv.addEventListener('change',()=>{
+    
+    for(i=0; i<dotw.length; i++){
+
+        if(document.getElementById("dotw-"+i).checked){
+            dotw[i].style.backgroundColor = "#eab69a"
+        }else{
+            dotw[i].style.backgroundColor = "rgb(201, 201, 201)";
+        }
+    }
+})
 
 
 
-       var checkbox = document.getElementById("checkbox");
-       var cbImg = document.getElementById("cb-img");
-       checkbox.addEventListener("change",()=>{
-           if(checkbox.checked){
-            cbImg.src = "{%static 'tankManage/img/lock.svg'%}";
-           }else{
-            cbImg.src = "{%static 'tankManage/img/unlock.svg'%}";
-           }
+var checkbox = document.getElementById("checkbox");
+var cbImg = document.getElementById("cb-img");
+checkbox.addEventListener("change",()=>{
+   if(checkbox.checked){
+    cbImg.src = "{%static 'tankManage/img/lock.svg'%}";
+   }else{
+    cbImg.src = "{%static 'tankManage/img/unlock.svg'%}";
+   }
+})
+const outoverlay = () => {
+    overlay.style.display="none";
+    modal.style.display="none";
+    body.style.overflow = "scroll";
+    menuWrap.classList.remove("on");
+    showMenu.classList.remove('btn-rotate');
+    showMenu.src = "{% static '/tankManage/img/menu.svg' %}";
+} 
+const onoverlay = () =>{
+    overlay.style.display="block";
+    modal.style.display="block";
+    body.style.overflow = "hidden";
+}
+
+function send(){
+    var title = document.getElementById('title');
+    var contents = document.getElementById('content');
+    var checkbox = document.getElementById('checkbox');
+    var thumbnail = document.getElementById('thumbnail');
+    var start = document.getElementById('timepicker');
+    var width = document.getElementById('width');
+    var depth = document.getElementById('depth');
+    var height = document.getElementById('height');
+    var changeWater = '';
+    
+    for(i=0; i<dotw.length; i++){
+        if(document.getElementById("dotw-"+i).checked){
+            changeWater += '1';
+        }else{
+            changeWater += '0';
+        }
+    }
+    const elList = [title,contents,thumbnail,changeWater,start,width,depth,height];
+    var formData = new FormData();
+    file = thumbnail.files[0];
+    formData.append('thumbnail',file);
+    formData.append('title',title.value);
+    formData.append('contents',contents.value);
+    formData.append('public',!checkbox.checked);
+    formData.append('changewater',changeWater);
+    formData.append('start',start.value);
+    formData.append('width',width.value);
+    formData.append('depth',depth.value);
+    formData.append('height',height.value);
+    // alert(thumbnail);
+    // alert(checkbox.checked);
+    fetch('/create_fishtank', {
+        method: 'POST',
+        body: formData,
+        headers:{
+            'X-CSRFToken': '{{csrf_token}}'
+        }
+    })
+    .then(res => res.json())
+    .then((result) =>{
+        alert("전송");
+        var lock= `<div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/lock.svg' %}"/>`;
+        var tankList = document.getElementById("tank-list");
+        
+            tankList.innerHTML+=`
+            <div style="margin:15px 0px;">\
+                <div style="border-radius: 5px 30px 0 0;background-color:  white">\
+                <img style="border-radius: 5px 30px 5px 30px;width:100%;height:130px;object-fit:cover;" src="${result.thumbnail ? result.thumbnail : 'default.jpeg'}">\
+            </div>\
+            <div style="width:100%;height:70px;background-color:  white;border-radius: 0 0 5px 30px;margin-top:-20px;padding-top:20px;display:flex;color: #3c3c3c;">\
+            <div style="margin:10px;width:100%">\
+                <div style="font-family: Y_Spotlight;font-size:13pt;">${result.title}</div>\
+                <div style="">${result.content}/\
+                    ${result.Fid}\
+                </div>\
+            </div>\
+            <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/bucket.svg' %}"/></div>\
+            <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/dispenser.svg' %}"/></div>\
+            ${result.public ?  '' : lock}\
+        </div>\
+        </div>\
+         `;
+        outoverlay();
+        // title.value ='';
+        // contents.value = '';
+        // thumbnail.value='';
+        // changeWater='';
+        // start.value='';
+       elList.forEach((e)=>{
+           e.value='';
        })
-       const outoverlay = () => {
+        checkbox.checked = false;
+
+        const cbReset = document.querySelectorAll('input[type="checkbox"]')
+        cbReset.forEach((box)=>{
+            box.value = false;
+
+        })
+    })
+}
+var plusBtn = document.getElementById("add-feed");
+var overlay = document.getElementById("modal-back");
+var modal = document.getElementsByClassName("modal-body")[0];
+var body = document.getElementsByTagName("body")[0];
+var menuWrap = document.querySelector('.menu-wrap');
+var showMenu = document.getElementById('show-menu');
+plusBtn.addEventListener('click',onoverlay);
+overlay.addEventListener("click",outoverlay);
+
+document.getElementById('go-back').addEventListener('click',()=>{
+    window.history.back();
+})
+document.addEventListener('DOMContentLoaded', ()=>{
+
+    showMenu.addEventListener('click',()=>{
+        if (menuWrap.classList.contains('on')){
+            
+            
+            menuWrap.classList.remove("on");
+            showMenu.classList.remove('btn-rotate');
+            showMenu.src = "{% static '/tankManage/img/menu.svg' %}";
             overlay.style.display="none";
-            modal.style.display="none";
             body.style.overflow = "scroll";
-        } 
-        const onoverlay = () =>{
+        }else{
+            
+            menuWrap.classList.add("on");
+            showMenu.classList.add('btn-rotate');
+            showMenu.src = "{% static '/tankManage/img/exit-white.svg' %}";
             overlay.style.display="block";
-            modal.style.display="block";
             body.style.overflow = "hidden";
         }
+        
+    })
+})
 
-        function send(){
-            var title = document.getElementById('title');
-            var contents = document.getElementById('content');
-            var checkbox = document.getElementById('checkbox');
-            var thumbnail = document.getElementById('thumbnail');
-            var start = document.getElementById('timepicker');
-            var width = document.getElementById('width');
-            var depth = document.getElementById('depth');
-            var height = document.getElementById('height');
-            var changeWater = '';
-            
-            for(i=0; i<dotw.length; i++){
-                if(document.getElementById("dotw-"+i).checked){
-                    changeWater += '1';
-                }else{
-                    changeWater += '0';
-                }
-            }
-            const elList = [title,contents,thumbnail,changeWater,start,width,depth,height];
-            var formData = new FormData();
-            file = thumbnail.files[0];
-            formData.append('thumbnail',file);
-            formData.append('title',title.value);
-            formData.append('contents',contents.value);
-            formData.append('public',!checkbox.checked);
-            formData.append('changewater',changeWater);
-            formData.append('start',start.value);
-            formData.append('width',width.value);
-            formData.append('depth',depth.value);
-            formData.append('height',height.value);
-            // alert(thumbnail);
-            // alert(checkbox.checked);
-            fetch('/create_fishtank', {
-                method: 'POST',
-                body: formData,
-                headers:{
-                    'X-CSRFToken': '{{csrf_token}}'
-                }
-            })
-            .then(res => res.json())
-            .then((result) =>{
-                alert("전송");
-                var lock= `<div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/lock.svg' %}"/>`;
-                var tankList = document.getElementById("tank-list");
-                
-                    tankList.innerHTML+=`
-                    <div style="margin:15px 0px;">\
-                        <div style="border-radius: 5px 30px 0 0;background-color:  white">\
-                        <img style="border-radius: 5px 30px 5px 30px;width:100%;height:130px;object-fit:cover;" src="${result.thumbnail ? result.thumbnail : 'default.jpeg'}">\
-                    </div>\
-                    <div style="width:100%;height:70px;background-color:  white;border-radius: 0 0 5px 30px;margin-top:-20px;padding-top:20px;display:flex;color: #3c3c3c;">\
-                    <div style="margin:10px;width:100%">\
-                        <div style="font-family: Y_Spotlight;font-size:13pt;">${result.title}</div>\
-                        <div style="">${result.content}/\
-                            ${result.Fid}\
-                        </div>\
-                    </div>\
-                    <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/bucket.svg' %}"/></div>\
-                    <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/dispenser.svg' %}"/></div>\
-                    ${result.public ?  '' : lock}\
-                </div>\
-                </div>\
-                 `;
-                outoverlay();
-                // title.value ='';
-                // contents.value = '';
-                // thumbnail.value='';
-                // changeWater='';
-                // start.value='';
-               elList.forEach((e)=>{
-                   e.value='';
-               })
-                checkbox.checked = false;
-
-                const cbReset = document.querySelectorAll('input[type="checkbox"]')
-                cbReset.forEach((box)=>{
-                    box.value = false;
-
-                })
-            })
-        }
-        plusBtn = document.getElementById("add-feed");
-        overlay = document.getElementById("modal-back");
-        modal = document.getElementsByClassName("modal-body")[0];
-        body = document.getElementsByTagName("body")[0];
-
-        plusBtn.addEventListener('click',onoverlay);
-        overlay.addEventListener("click",outoverlay);
         </script>
-        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script>
-        $('#click').click(function(){
-            var title = $('#title').val() ;
-            var content = $('#content').val();
-            alert(title)
-            $.ajax({ 
-                type:"POST",
-            url:'create_fishtank',
-            dataType:'json',
-
-            data : {
-                'title' : title,
-                'contents' : content,
-                'csrfmiddlewaretoken': '{{csrf_token}}',
-            },
-                success:function(data){
-                    console.log(data);
-                },
-                error: function(request,status,error){
-                    alert(error)
-                } }) }) 
-        </script>
-        -->
     </div>
     </body>
 </html>
