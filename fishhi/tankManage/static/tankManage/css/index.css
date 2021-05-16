@@ -323,3 +323,9 @@ div{
     position:absolute;
     margin:3px 10px;
 }
+#open:visited{
+    color:#393939;
+}
+#open:link{
+    color:#393939;
+}

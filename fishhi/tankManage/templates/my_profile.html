@@ -512,7 +512,7 @@ function send(){
             <div style="margin:10px;width:100%">\
                 <div style="font-family: Y_Spotlight;font-size:13pt;">${result.title}</div>\
                 <div style="">${result.content}/\
-                    ${result.Fid}\
+                    ${result.start}\
                 </div>\
             </div>\
             <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/bucket.svg' %}"/></div>\
@@ -562,6 +562,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
             showMenu.src = "{% static '/tankManage/img/menu.svg' %}";
             overlay.style.display="none";
             body.style.overflow = "scroll";
+            
         }else{
             
             menuWrap.classList.add("on");
@@ -569,6 +570,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
             showMenu.src = "{% static '/tankManage/img/exit-white.svg' %}";
             overlay.style.display="block";
             body.style.overflow = "hidden";
+            modal.style.display="none";
         }
         
     })
