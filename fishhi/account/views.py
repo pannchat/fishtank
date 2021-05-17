@@ -56,7 +56,7 @@ def signin(request):
         return render(request, 'signin.html')
 
 def signout(request):
-    if request.method == 'POST':
-        auth.logout(request)
-        redirect('index')
-    return render(request, 'login.html')
+
+    auth.logout(request)
+
+    return render(request, 'signin.html')
