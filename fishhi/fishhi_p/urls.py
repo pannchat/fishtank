@@ -27,6 +27,7 @@ urlpatterns = [
     path('', tankManage.views.feed, name="index"),
     path('test', tankManage.views.test, name="test"),
     path('create_fishtank', tankManage.views.create_fishtank, name="create_fishtank"),
+    path('modify_fishtank/<int:pid>', tankManage.views.modify_fishtank, name="modify_fishtank"),
     path('add_fish/<int:pid>', tankManage.views.add_fish, name="add_fish"),
     path('add_plant/<int:pid>', tankManage.views.add_plant, name="add_plant"),
     path('add_supplies/<int:pid>', tankManage.views.add_supplies, name="add_supplies"),

@@ -78,7 +78,7 @@
                         <article>{{i.contents}}/{{i.start|date:'Y-m-d'}}</article>
                         </figcaption>
                     </div>
-                    <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/dispenser.svg' %}"/></div>
+                    <div onclick="event.stopPropagation(); onoverlay()"style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/dispenser.svg' %}"/></div>
                     <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/bucket.svg' %}"/></div>
                     
                     {%if i.public != True %} 

@@ -200,6 +200,31 @@ def create_fishtank(request):
 
     # Feed.objects.create(title=title, username=username, contents=content)
     # print(request.method)
+
+def modify_fishtank(request, pid):
+    try:
+        fishtank = Feed.objects.get(id=pid)
+    except Feed.DoesNotExist:
+        raise Http404("Does not exist!")
+    print(fishtank.thumbnail)
+    print("\n\n\n\n\n\n\n")
+    if fishtank.thumbnail:
+        thumbnail = fishtank.thumbnail.url
+    else:
+        thumbnail = None
+    data = {
+        'title':fishtank.title,
+        'content':fishtank.contents,
+        'Fid':fishtank.id,
+        'public':fishtank.public,
+        'thumbnail':thumbnail,
+        'changewater':fishtank.changewater,
+        'start':fishtank.start,
+        
+        }
+    return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type = "application/json")
+
+
 def fishtank(request,pid):
     try:
         fishtank = Feed.objects.get(id=pid)

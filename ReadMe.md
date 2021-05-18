@@ -10,10 +10,27 @@
 ---
 Python, Javascript, CSS, HTML
 
-#설치
+#요구사항
 ---
 ```
-beautifulsoup4
+asgiref==3.3.1
+beautifulsoup4==4.9.3
+certifi==2020.12.5
+chardet==4.0.0
+dj-database-url==0.5.0
+Django==3.1.7
+django-crontab==0.7.1
+gunicorn==20.1.0
+idna==2.10
+lxml==4.6.3
+Pillow==8.2.0
+psycopg2-binary==2.8.6
+pytz==2021.1
+requests==2.25.1
+soupsieve==2.2.1
+sqlparse==0.4.1
+urllib3==1.26.4
+whitenoise==5.2.0
 ```
 
 #환경
