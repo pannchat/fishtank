@@ -227,85 +227,90 @@ const onoverlay = () =>{
 
 function send(){
     var title = document.getElementById('title');
-    var contents = document.getElementById('content');
-    var checkbox = document.getElementById('checkbox');
-    var thumbnail = document.getElementById('thumbnail');
-    var start = document.getElementById('timepicker');
-    var width = document.getElementById('width');
-    var depth = document.getElementById('depth');
-    var height = document.getElementById('height');
-    var changeWater = '';
-    
-    for(i=0; i<dotw.length; i++){
-        if(document.getElementById("dotw-"+i).checked){
-            changeWater += '1';
-        }else{
-            changeWater += '0';
+    if (title.value==""){
+        alert("이름은 필수로 입력해야 합니다.");
+    }else{   
+        var contents = document.getElementById('content');
+        var checkbox = document.getElementById('checkbox');
+        var thumbnail = document.getElementById('thumbnail');
+        var start = document.getElementById('timepicker');
+        var width = document.getElementById('width');
+        var depth = document.getElementById('depth');
+        var height = document.getElementById('height');
+        var changeWater = '';
+        
+        for(i=0; i<dotw.length; i++){
+            if(document.getElementById("dotw-"+i).checked){
+                changeWater += '1';
+            }else{
+                changeWater += '0';
+            }
+        }
+        const elList = [title,contents,thumbnail,changeWater,start,width,depth,height];
+        var formData = new FormData();
+        file = thumbnail.files[0];
+        formData.append('thumbnail',file);
+        formData.append('title',title.value);
+        formData.append('contents',contents.value);
+        formData.append('public',!checkbox.checked);
+        formData.append('changewater',changeWater);
+        formData.append('start',start.value);
+        formData.append('width',width.value);
+        formData.append('depth',depth.value);
+        formData.append('height',height.value);
+        // alert(thumbnail);
+        // alert(checkbox.checked);
+        fetch('/create_fishtank', {
+            method: 'POST',
+            body: formData,
+            headers:{
+                'X-CSRFToken': '{{csrf_token}}'
+            }
+        })
+        .then(res => res.json())
+        .then((result) =>{
+            alert("전송");
+            var lock= `<div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/lock.svg' %}"/>`;
+            var tankList = document.getElementById("tank-list");
+            
+                tankList.innerHTML+=`
+                <div style="margin:15px 0px;">\
+                    <div style="border-radius: 5px 30px 0 0;background-color:  white">\
+                    <img style="border-radius: 5px 30px 5px 30px;width:100%;height:130px;object-fit:cover;" src="${result.thumbnail ? result.thumbnail : 'default.jpeg'}">\
+                </div>\
+                <div style="width:100%;height:70px;background-color:  white;border-radius: 0 0 5px 30px;margin-top:-20px;padding-top:20px;display:flex;color: #3c3c3c;">\
+                <div style="margin:10px;width:100%">\
+                    <div style="font-family: Y_Spotlight;font-size:13pt;">${result.title}</div>\
+                    <div style="">${result.content}/\
+                        ${result.start}\
+                    </div>\
+                </div>\
+                <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/bucket.svg' %}"/></div>\
+                <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/dispenser.svg' %}"/></div>\
+                ${result.public ?  '' : lock}\
+            </div>\
+            </div>\
+            `;
+            outoverlay();
+            // title.value ='';
+            // contents.value = '';
+            // thumbnail.value='';
+            // changeWater='';
+            // start.value='';
+            elList.forEach((e)=>{
+                e.value='';
+            })
+            checkbox.checked = false;
+
+            const cbReset = document.querySelectorAll('input[type="checkbox"]')
+            cbReset.forEach((box)=>{
+                box.value = false;
+
+            })
+        })
         }
     }
-    const elList = [title,contents,thumbnail,changeWater,start,width,depth,height];
-    var formData = new FormData();
-    file = thumbnail.files[0];
-    formData.append('thumbnail',file);
-    formData.append('title',title.value);
-    formData.append('contents',contents.value);
-    formData.append('public',!checkbox.checked);
-    formData.append('changewater',changeWater);
-    formData.append('start',start.value);
-    formData.append('width',width.value);
-    formData.append('depth',depth.value);
-    formData.append('height',height.value);
-    // alert(thumbnail);
-    // alert(checkbox.checked);
-    fetch('/create_fishtank', {
-        method: 'POST',
-        body: formData,
-        headers:{
-            'X-CSRFToken': '{{csrf_token}}'
-        }
-    })
-    .then(res => res.json())
-    .then((result) =>{
-        alert("전송");
-        var lock= `<div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/lock.svg' %}"/>`;
-        var tankList = document.getElementById("tank-list");
-        
-            tankList.innerHTML+=`
-            <div style="margin:15px 0px;">\
-                <div style="border-radius: 5px 30px 0 0;background-color:  white">\
-                <img style="border-radius: 5px 30px 5px 30px;width:100%;height:130px;object-fit:cover;" src="${result.thumbnail ? result.thumbnail : 'default.jpeg'}">\
-            </div>\
-            <div style="width:100%;height:70px;background-color:  white;border-radius: 0 0 5px 30px;margin-top:-20px;padding-top:20px;display:flex;color: #3c3c3c;">\
-            <div style="margin:10px;width:100%">\
-                <div style="font-family: Y_Spotlight;font-size:13pt;">${result.title}</div>\
-                <div style="">${result.content}/\
-                    ${result.start}\
-                </div>\
-            </div>\
-            <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/bucket.svg' %}"/></div>\
-            <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/dispenser.svg' %}"/></div>\
-            ${result.public ?  '' : lock}\
-        </div>\
-        </div>\
-         `;
-        outoverlay();
-        // title.value ='';
-        // contents.value = '';
-        // thumbnail.value='';
-        // changeWater='';
-        // start.value='';
-       elList.forEach((e)=>{
-           e.value='';
-       })
-        checkbox.checked = false;
 
-        const cbReset = document.querySelectorAll('input[type="checkbox"]')
-        cbReset.forEach((box)=>{
-            box.value = false;
-
-        })
-    })
-}
 var plusBtn = document.getElementById("add-feed");
 var overlay = document.getElementById("modal-back");
 var modal = document.getElementsByClassName("modal-body")[0];
