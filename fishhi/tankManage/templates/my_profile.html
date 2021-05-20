@@ -78,7 +78,7 @@
                         <article>{{i.contents}}/{{i.start|date:'Y-m-d'}}</article>
                         </figcaption>
                     </div>
-                    <div onclick="event.stopPropagation(); onoverlay()"style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/dispenser.svg' %}"/></div>
+                    <div onclick="test()"style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/dispenser.svg' %}"/></div>
                     <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/bucket.svg' %}"/></div>
                     
                     {%if i.public != True %} 
@@ -199,7 +199,27 @@ dotwDiv.addEventListener('change',()=>{
         }
     }
 })
-
+function test(){
+        event.stopPropagation();
+        onoverlay
+        var contents = document.getElementById('content');
+        var checkbox = document.getElementById('checkbox');
+        var thumbnail = document.getElementById('thumbnail');
+        var start = document.getElementById('timepicker');
+        var width = document.getElementById('width');
+        var depth = document.getElementById('depth');
+        var height = document.getElementById('height');
+        var changeWater = '';
+        
+        for(i=0; i<dotw.length; i++){
+            if(document.getElementById("dotw-"+i).checked){
+                changeWater += '1';
+            }else{
+                changeWater += '0';
+            }
+        }
+        title.value = '';
+}
 
 
 var checkbox = document.getElementById("checkbox");
@@ -219,10 +239,14 @@ const outoverlay = () => {
     showMenu.classList.remove('btn-rotate');
     showMenu.src = "{% static '/tankManage/img/menu.svg' %}";
 } 
-const onoverlay = () =>{
-    overlay.style.display="block";
-    modal.style.display="block";
-    body.style.overflow = "hidden";
+const onoverlay = (t) =>{
+    if (t){
+        alert("");
+    }else{
+        overlay.style.display="block";
+        modal.style.display="block";
+        body.style.overflow = "hidden";
+    }
 }
 
 function send(){
