@@ -64,22 +64,22 @@
         {%for i in feed_list%}
 
         
-            <figure style="margin:15px 0px;">
+            <figure id="{{i.id}}" style="margin:15px 0px;">
 
                 {% if i.thumbnail != '' %} <!-- 썸네일 -->
                     <img class="img-thumb" style="object-position:0 70%;" src="/media/{{i.thumbnail}}">
                 {% else %}
                     <img class="img-thumb" style="object-position:0 90%;" src="{% static 'tankManage/img/default.jpeg' %}">
                 {% endif %}
-                
-                <div class="figure" onclick="location.href='/fishtank/{{i.id}}'">
-                    <div style="margin:10px;width:100%">
+
+                <div class="figure">
+                    <div onclick="location.href='/fishtank/{{i.id}}'" class="fig-head">
                         <figcaption style="font-family: Y_Spotlight;font-size:13pt;">{{i.title}}</figcaption>
-                        <article>{{i.contents}}/{{i.start|date:'Y-m-d'}}</article>
+                        <article>{{i.contents}}/{{i.start|date:'Y-m-d'}}/{{i.dday}}</article>
                         </figcaption>
                     </div>
-                    <div onclick="test()"style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/dispenser.svg' %}"/></div>
-                    <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/bucket.svg' %}"/></div>
+                    <div onclick="test('{{i.id}}')"style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/dispenser.svg' %}"/></div>
+                    <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/edit-text.svg' %}"/></div>
                     
                     {%if i.public != True %} 
                         <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:28px;" src="{% static 'tankManage/img/lock2.svg' %}"/></div>
@@ -144,7 +144,7 @@
                 
                 <div style="display:flex; align-items: center;">
                     <div class="icon">
-                        <img style="width:30px;"src="{% static 'tankManage/img/bucket.svg' %}"/>
+                        <img style="width:30px;"src="{% static 'tankManage/img/edit-text.svg' %}"/>
                         환수
                     </div>
 
@@ -199,9 +199,9 @@ dotwDiv.addEventListener('change',()=>{
         }
     }
 })
-function test(){
-        event.stopPropagation();
-        onoverlay
+function test(id){
+        // event.stopPropagation();
+        var title = document.getElementById('title');
         var contents = document.getElementById('content');
         var checkbox = document.getElementById('checkbox');
         var thumbnail = document.getElementById('thumbnail');
@@ -218,8 +218,32 @@ function test(){
                 changeWater += '0';
             }
         }
-        title.value = '';
+        fetch('/modify_fishtank/'+id, {
+            method: 'POST',
+            headers:{
+                'X-CSRFToken': '{{csrf_token}}'
+            }
+        }).then(res => res.json())
+        .then((result) =>{
+            contents.value = result.content;
+            title.value = result.title;
+            width.value = result.width;
+            depth.value = result.depth;
+            height.value = result.height;
+            start.value = result.start;
+            if (result.public){
+                var cbImg = document.getElementById("cb-img");
+                alert(result.public);
+                cbImg.src = "{%static 'tankManage/img/lock.svg'%}";
+
+            }
+
+            
+        })
+        onoverlay()
 }
+    
+
 
 
 var checkbox = document.getElementById("checkbox");
@@ -239,9 +263,11 @@ const outoverlay = () => {
     showMenu.classList.remove('btn-rotate');
     showMenu.src = "{% static '/tankManage/img/menu.svg' %}";
 } 
-const onoverlay = (t) =>{
-    if (t){
-        alert("");
+const onoverlay = (id) =>{
+    if (id){
+        overlay.style.display="block";
+        modal.style.display="block";
+        body.style.overflow = "hidden";
     }else{
         overlay.style.display="block";
         modal.style.display="block";
@@ -250,6 +276,7 @@ const onoverlay = (t) =>{
 }
 
 function send(){
+    inputReset();
     var title = document.getElementById('title');
     if (title.value==""){
         alert("이름은 필수로 입력해야 합니다.");
@@ -284,7 +311,7 @@ function send(){
         formData.append('height',height.value);
         // alert(thumbnail);
         // alert(checkbox.checked);
-        fetch('/create_fishtank', {
+        fetch('/update_fishtank/2', {
             method: 'POST',
             body: formData,
             headers:{
@@ -309,18 +336,18 @@ function send(){
                         ${result.start}\
                     </div>\
                 </div>\
-                <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/bucket.svg' %}"/></div>\
+                <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/edit-text.svg' %}"/></div>\
                 <div style="width:50px;display:flex;justify-content: center;align-items: center;"><img style="width:30px;" src="{% static 'tankManage/img/dispenser.svg' %}"/></div>\
                 ${result.public ?  '' : lock}\
             </div>\
             </div>\
             `;
             outoverlay();
-            // title.value ='';
-            // contents.value = '';
-            // thumbnail.value='';
-            // changeWater='';
-            // start.value='';
+            title.value ='';
+            contents.value = '';
+            thumbnail.value='';
+            changeWater='';
+            start.value='';
             elList.forEach((e)=>{
                 e.value='';
             })
@@ -329,7 +356,6 @@ function send(){
             const cbReset = document.querySelectorAll('input[type="checkbox"]')
             cbReset.forEach((box)=>{
                 box.value = false;
-
             })
         })
         }
@@ -341,7 +367,10 @@ var modal = document.getElementsByClassName("modal-body")[0];
 var body = document.getElementsByTagName("body")[0];
 var menuWrap = document.querySelector('.menu-wrap');
 var showMenu = document.getElementById('show-menu');
-plusBtn.addEventListener('click',onoverlay);
+plusBtn.addEventListener('click',()=>{
+    inputReset();
+    onoverlay();
+});
 overlay.addEventListener("click",outoverlay);
 
 document.getElementById('go-back').addEventListener('click',()=>{
@@ -371,7 +400,33 @@ document.addEventListener('DOMContentLoaded', ()=>{
         
     })
 })
+function inputReset(){
+    
+    var title = document.getElementById('title');
+    var contents = document.getElementById('content');
+    var checkbox = document.getElementById('checkbox');
+    var thumbnail = document.getElementById('thumbnail');
+    var start = document.getElementById('timepicker');
+    var width = document.getElementById('width');
+    var depth = document.getElementById('depth');
+    var height = document.getElementById('height');
+    var changeWater = '';
+    const elList = [title,contents,thumbnail,changeWater,start,width,depth,height];
+    // title.value ='';
+    // contents.value = '';
+    // thumbnail.value='';
+    // changeWater='';
+    // start.value='';
+    elList.forEach((e)=>{
+        e.value='';
+    })
+    checkbox.checked = false;
 
+    const cbReset = document.querySelectorAll('input[type="checkbox"]')
+    cbReset.forEach((box)=>{
+        box.value = false;
+    })
+}
         </script>
     </div>
     </body>

@@ -200,6 +200,55 @@ def create_fishtank(request):
 
     # Feed.objects.create(title=title, username=username, contents=content)
     # print(request.method)
+def update_fishtank(request,pid):
+    try:
+        fishtank = Feed.objects.get(id=pid)
+    except Feed.DoesNotExist:
+        raise Http404("Does not exist!")
+
+    if request.method == "POST":
+        title = request.POST['title']
+        content = request.POST['contents']
+        public = request.POST['public']
+        changewater = request.POST['changewater']
+        width = request.POST['width']
+        depth = request.POST['depth']
+        height = request.POST['height']
+        if request.POST['start'] != '':
+            start = datetime.datetime.strptime(request.POST['start'],"%Y-%m-%d").date()
+        else:
+            start = None
+
+        if public == 'true' :
+            public = True
+        else:
+            public = False
+        if request.FILES :
+            thumbnail = request.FILES['thumbnail']
+        else:
+            thumbnail = None
+        username = request.user
+        fishtank.title = title
+        fishtank.contents= content
+        fishtank.public = public
+        fishtank.thumbnail = thumbnail
+        fishtank.changewater = changewater
+        fishtank.save()
+        # Feeds = Feed.objects.create(title=title, username=username, contents=content, public=public,thumbnail=thumbnail,changewater=changewater,start=start,width=width,depth=depth,height=height)
+
+        
+        data = {
+            'title':title,
+            'content':content,
+            'Fid':fishtank.id,
+            'public':public,
+            'thumbnail':thumbnail,
+            'changewater':changewater,
+            'start':start,
+            
+        }
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type = "application/json")
+    raise Http404("Does not exist!")
 
 def modify_fishtank(request, pid):
     try:
@@ -216,6 +265,9 @@ def modify_fishtank(request, pid):
         'title':fishtank.title,
         'content':fishtank.contents,
         'Fid':fishtank.id,
+        'width':fishtank.width,
+        'height':fishtank.height,
+        'depth' : fishtank.depth,
         'public':fishtank.public,
         'thumbnail':thumbnail,
         'changewater':fishtank.changewater,
@@ -230,9 +282,18 @@ def fishtank(request,pid):
         fishtank = Feed.objects.get(id=pid)
     except Feed.DoesNotExist:
         raise Http404("Does not exist!")
-    today = datetime.date.today()
-    fishes = Fish.objects.all().filter(feed_fish_id=pid) 
+    
+    fishes = Fish.objects.all().filter(feed_fish_id=pid)
+    Dday(fishes)
     plants = Plant.objects.all().filter(feed_plant_id=pid) 
+    Dday(plants)
     supplies = Supplies.objects.all().filter(feed_supplies_id=pid) 
+    Dday(supplies)
+    return render(request, 'fishtank.html',{'fishtank':fishtank,"fishes":fishes,"plants":plants, "supplies":supplies,"pid":pid})
 
-    return render(request, 'fishtank.html',{'fishtank':fishtank,"fishes":fishes,"plants":plants, "supplies":supplies,"today":today,"pid":pid})
+# 쿼리셋에 Dday 추가
+def Dday(obj):
+    today = datetime.date.today()
+    for el in obj:
+        el.dday = (today - el.get).days
+        print(el.dday)

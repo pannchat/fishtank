@@ -6,7 +6,7 @@ from django.contrib import auth
 from tankManage.models import Feed
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+import datetime
 from django.utils.dateformat import DateFormat
 
 @login_required(login_url='/signin')
@@ -14,6 +14,11 @@ def my_profile(request):
     who = get_object_or_404(User, username=request.user)
     feeds = Feed.objects.all()
     feed_list = feeds.filter(username=who)
+    today = datetime.date.today()
+    dday = (today - feed_list[0].start)
+    for el in feed_list:
+        el.dday = dday.days
+    print(feed_list[0].dday)
     context = {'feed_list':feed_list}
     return render(request, "my_profile.html",context )
 

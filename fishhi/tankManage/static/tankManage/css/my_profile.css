@@ -190,7 +190,11 @@ h3,h4{
     padding-top:20px;
     display:flex;
     color: #3c3c3c;
-    cursor: pointer;
+}
+.fig-head{
+    margin:10px;
+    width:100%;
+    cursor:pointer;
 }
 div > .input {
     margin-top:0px;
